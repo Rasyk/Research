@@ -10,6 +10,7 @@ import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -23,10 +24,11 @@ public class MainActivity extends Activity {
 	public void onGPSButtonClick(View v){
 		Log.i("b","gps");
 		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);;
-		DeviceListener deviceListener = new DeviceListener();
+		DeviceListener deviceListener = new DeviceListener(this);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, deviceListener);
 		return;
 	}
+	
 	@SuppressLint("NewApi")
 	public void x (View v){
 		Log.i("b","cell");
@@ -62,4 +64,5 @@ public class MainActivity extends Activity {
 	public void onAccelButtonClick(View v){
 		return;
 	}
+	
 }

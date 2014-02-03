@@ -1,20 +1,32 @@
 package com.research.tools;
 
+import android.app.Activity;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 public class DeviceListener implements LocationListener{
+	private Activity activity;
 	private Location lastLoc = null;
-	private long timeStarted;
+	private long timeStarted = System.currentTimeMillis();
 	private int updates = 0;
 	private long timeTillFirstUpdate = -1;
+	public DeviceListener(Activity a){
+		this.activity = a;
+	}
 	@Override
 	public void onLocationChanged(Location location) {
 		this.lastLoc = location;
 		updates++;
-		Log.i(Integer.toString(updates),Float.toString(lastLoc.getAccuracy()));
+		TextView text = (TextView) activity.findViewById(R.id.latitudeTextView);
+		TextView text2 = (TextView) activity.findViewById(R.id.longitudeTextView);
+		TextView text3 = (TextView) activity.findViewById(R.id.gpsTimeTextView);
+		text.setText(Double.toString(location.getLatitude()));
+		text2.setText(Double.toString(location.getLongitude()));
+		text3.setText(getTimeRunning());
+		
 	}
 	
 	@Override
@@ -25,7 +37,6 @@ public class DeviceListener implements LocationListener{
 	
 	@Override
 	public void onProviderEnabled(String provider) {
-		timeStarted = System.nanoTime();
 		return;
 	}
 	
@@ -40,7 +51,9 @@ public class DeviceListener implements LocationListener{
 	public int getUpdateCount(){
 		return updates;
 	}
-	public long getTimeRunning(){
-		return System.nanoTime() - timeStarted;
+	public String getTimeRunning(){ 
+		long temp = (System.currentTimeMillis() - timeStarted) / 1000;
+		String ret = Long.toString(temp / (60 * 60)) + ":" + Long.toString((temp / 60) % 60) + ":" + Long.toString(temp % 60 );
+		return ret;
 	}
 }
