@@ -10,25 +10,53 @@ import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
-
+private static Context context;
+private boolean gpsOn = false;
+private LocationManager locationManager;
+private DeviceListener deviceListener;
+//Thread screenThread = new Thread(){
+//	private boolean running = false;
+//	public void run(){
+//		running = true;
+//		long currentTime = System.nanoTime();
+//		long lastTime = System.nanoTime();
+//		while(running){
+//			if(currentTime - lastTime > 100000){
+//				deviceListener.updateGUI();
+//				lastTime = System.nanoTime();
+//			}	
+//			currentTime = System.nanoTime();
+//		}
+//	}
+//};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_main);
+		MainActivity.context = getApplicationContext();
 	}
 	public void onGPSButtonClick(View v){
 		Log.i("b","gps");
-		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);;
-		DeviceListener deviceListener = new DeviceListener(this);
+		if(!gpsOn){
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		deviceListener = new DeviceListener(this);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, deviceListener);
+//		screenThread.run();
+		} else {
+			locationManager.removeUpdates(deviceListener);
+//			screenThread.interrupt();
+		}
+		gpsOn = !gpsOn;
 		return;
 	}
 	
+	public static Context getContext(){
+		return context;
+	}
 	@SuppressLint("NewApi")
 	public void x (View v){
 		Log.i("b","cell");
