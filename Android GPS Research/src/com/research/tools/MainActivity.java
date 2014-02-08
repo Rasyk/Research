@@ -1,5 +1,6 @@
 package com.research.tools;
 import android.annotation.SuppressLint;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -10,6 +11,7 @@ import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.view.View;
+import android.content.Intent;
 
 public class MainActivity extends Activity {
 private static Context context;
@@ -91,6 +93,10 @@ private DeviceListener deviceListener;
 	}
 	public void onAccelButtonClick(View v){
 		return;
+	}
+	public void onCellButtonClick(View view){
+	    Intent intent = new Intent(this, CellActivity.class);
+	    startActivity(intent);
 	}
 	
 }

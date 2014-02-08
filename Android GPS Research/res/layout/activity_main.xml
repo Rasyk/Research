@@ -195,7 +195,7 @@
         android:layout_alignBottom="@+id/button2"
         android:layout_alignParentLeft="true"
         android:text="Cell"
-        android:onClick="x" />
+        android:onClick="onCellButtonClick" />
 
     <TextView
         android:id="@+id/textView7"

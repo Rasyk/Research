@@ -24,14 +24,17 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080015;
+        public static final int action_settings=0x7f080018;
         public static final int batteryChangeTextView=0x7f080000;
         public static final int button1=0x7f080014;
         public static final int button2=0x7f080013;
         public static final int button3=0x7f080012;
+        public static final int editText1=0x7f080015;
         public static final int gpsTimeTextView=0x7f08000a;
         public static final int latitudeTextView=0x7f080010;
         public static final int longitudeTextView=0x7f080011;
+        public static final int request=0x7f080016;
+        public static final int response=0x7f080017;
         public static final int textView1=0x7f080002;
         public static final int textView10=0x7f080009;
         public static final int textView12=0x7f08000b;
@@ -49,6 +52,7 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
+        public static final int cell_activity=0x7f030001;
     }
     public static final class menu {
         public static final int main=0x7f070000;
