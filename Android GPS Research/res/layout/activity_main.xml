@@ -43,7 +43,7 @@
         android:layout_alignBaseline="@+id/textView1"
         android:layout_alignBottom="@+id/textView1"
         android:layout_alignRight="@+id/batteryChangeTextView"
-        android:text="0.0s"
+        android:text="0:0:0s"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -98,7 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView8"
         android:layout_alignRight="@+id/updatesTextView"
-        android:text="0:0"
+        android:text="0:0:0"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -108,16 +108,16 @@
         android:layout_alignBaseline="@+id/textView8"
         android:layout_alignBottom="@+id/textView8"
         android:layout_alignRight="@+id/gpsTimeTextView"
-        android:text="0:0"
+        android:text="0:0:0"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/wifiTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView10"
         android:layout_alignRight="@+id/textView12"
-        android:text="0:0"
+        android:text="0:0:0"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -126,8 +126,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView10"
         android:layout_alignBottom="@+id/textView10"
-        android:layout_alignRight="@+id/textView13"
-        android:text="0:0"
+        android:layout_alignRight="@+id/wifiTimeTextView"
+        android:text="0:0:0"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -175,8 +175,8 @@
         android:layout_alignBaseline="@+id/button2"
         android:layout_alignBottom="@+id/button2"
         android:layout_alignParentRight="true"
-        android:text="Accel" 
-        android:onClick="onAccelButtonClick"/>
+        android:text="Wifi" 
+        android:onClick="onWifiButtonClick"/>
 
     <Button
         android:id="@+id/button2"

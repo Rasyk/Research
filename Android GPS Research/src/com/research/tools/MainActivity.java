@@ -16,23 +16,9 @@ import android.content.Intent;
 public class MainActivity extends Activity {
 private static Context context;
 private boolean gpsOn = false;
+private boolean wifiOn = false;
 private LocationManager locationManager;
 private DeviceListener deviceListener;
-//Thread screenThread = new Thread(){
-//	private boolean running = false;
-//	public void run(){
-//		running = true;
-//		long currentTime = System.nanoTime();
-//		long lastTime = System.nanoTime();
-//		while(running){
-//			if(currentTime - lastTime > 100000){
-//				deviceListener.updateGUI();
-//				lastTime = System.nanoTime();
-//			}	
-//			currentTime = System.nanoTime();
-//		}
-//	}
-//};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,19 +29,29 @@ private DeviceListener deviceListener;
 	}
 	public void onGPSButtonClick(View v){
 		Log.i("b","gps");
-		if(!gpsOn){
+		if(!wifiOn){
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		deviceListener = new DeviceListener(this);
+		deviceListener = new DeviceListener(this,0);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, deviceListener);
-//		screenThread.run();
 		} else {
 			locationManager.removeUpdates(deviceListener);
-//			screenThread.interrupt();
 		}
 		gpsOn = !gpsOn;
 		return;
 	}
-	
+	public void onWifiButtonClick(View v){
+		Log.i("b","wifi");
+		if(!wifiOn){
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		deviceListener = new DeviceListener(this,1);
+		locationManager.removeUpdates(deviceListener);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, deviceListener);
+		} else {
+			locationManager.removeUpdates(deviceListener);
+		}
+		wifiOn = !wifiOn;
+		return;
+	}
 	public static Context getContext(){
 		return context;
 	}

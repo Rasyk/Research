@@ -14,12 +14,14 @@ public class DeviceListener implements LocationListener{
 	private Activity activity;
 	
 	private int updates = 0;
+	private int type;
 	
 	private float initialBattery;
 	
 	private String timeTillFirstUpdate = "";
 	private long timeStarted;
-	public DeviceListener(Activity a){
+	public DeviceListener(Activity a,int type){
+		this.type = type;
 		this.initialBattery = getCurrentBatteryLevel();
 		this.activity = a;
 		this.timeStarted = System.currentTimeMillis();
@@ -40,13 +42,16 @@ public class DeviceListener implements LocationListener{
 		Log.i("ping","ping");
 		TextView lat = (TextView) activity.findViewById(R.id.latitudeTextView);
 		TextView lon = (TextView) activity.findViewById(R.id.longitudeTextView);
-		TextView gpsTime = (TextView) activity.findViewById(R.id.gpsTimeTextView);
+		TextView time = (TextView) activity.findViewById(R.id.wifiTimeTextView);
+		if(type == 0){
+			time = (TextView) activity.findViewById(R.id.gpsTimeTextView);
+		}
 		TextView batChange = (TextView) activity.findViewById(R.id.batteryChangeTextView);
 		TextView updateCount = (TextView) activity.findViewById(R.id.updatesTextView);
 		
 		lat.setText(Double.toString(location.getLatitude()));
 		lon.setText(Double.toString(location.getLongitude()));
-		gpsTime.setText(getTimeRunning());
+		time.setText(getTimeRunning());
 		batChange.setText(Integer.toString((int)getBatteryChange()) + "%");
 		updateCount.setText(Integer.toString(updates));
 		
