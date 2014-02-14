@@ -168,34 +168,34 @@
         android:text="@string/Longitude"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/button3"
+    <ToggleButton
+        android:id="@+id/wifi_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button2"
-        android:layout_alignBottom="@+id/button2"
+        android:layout_alignBaseline="@+id/gps_button"
+        android:layout_alignBottom="@+id/gps_button"
         android:layout_alignParentRight="true"
-        android:text="Wifi" 
-        android:onClick="onWifiButtonClick"/>
+        android:textOff="@string/wifi_button_text" 
+        android:textOn="@string/wifi_button_text"/>
 
-    <Button
-        android:id="@+id/button2"
+    <ToggleButton
+        android:id="@+id/gps_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="GPS" 
-        android:onClick="onGPSButtonClick"/>
+        android:textOff="@string/gps_button_text" 
+        android:textOn="@string/gps_button_text"/>
 
-    <Button
-        android:id="@+id/button1"
+    <ToggleButton
+        android:id="@+id/cell_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button2"
-        android:layout_alignBottom="@+id/button2"
+        android:layout_alignBaseline="@+id/gps_button"
+        android:layout_alignBottom="@+id/gps_button"
         android:layout_alignParentLeft="true"
-        android:text="Cell"
-        android:onClick="onCellButtonClick" />
+        android:textOff="@string/cell_button_text" 
+        android:textOn="@string/cell_button_text"/>
 
     <TextView
         android:id="@+id/textView7"

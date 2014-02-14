@@ -6,5 +6,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="Longitude">0</string>
     <string name="Latitude">0</string>
+    <string name="gps_button_text">GPS</string>
+    <string name="wifi_button_text">WIFI</string>
+    <string name="cell_button_text">CELL</string>
 
 </resources>

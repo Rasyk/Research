@@ -11,7 +11,11 @@ import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 import android.content.Intent;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import 	android.R.anim;
 
 public class MainActivity extends Activity {
 private static Context context;
@@ -19,6 +23,10 @@ private boolean gpsOn = false;
 private boolean wifiOn = false;
 private LocationManager locationManager;
 private DeviceListener deviceListener;
+private ToggleButton gpsButton;
+private ToggleButton wifiButton;
+private ToggleButton cellButton;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +34,20 @@ private DeviceListener deviceListener;
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_main);
 		MainActivity.context = getApplicationContext();
+		
+		gpsButton = (ToggleButton) findViewById(R.id.gps_button);
+		wifiButton = (ToggleButton) findViewById(R.id.wifi_button);
+		cellButton = (ToggleButton) findViewById(R.id.cell_button);
+		
+		gpsButton.setOnCheckedChangeListener(new GPSButtonListner());
+		wifiButton.setOnCheckedChangeListener(new WifiButtonListner());
+		cellButton.setOnCheckedChangeListener(new CellButtonListner());
+		
 	}
-	public void onGPSButtonClick(View v){
+	public void onGPSButtonClick(){
 		Log.i("b","gps");
+		wifiButton.setChecked(false);
+		cellButton.setChecked(false);
 		if(!wifiOn){
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		deviceListener = new DeviceListener(this,0);
@@ -39,8 +58,10 @@ private DeviceListener deviceListener;
 		gpsOn = !gpsOn;
 		return;
 	}
-	public void onWifiButtonClick(View v){
+	public void onWifiButtonClick(){
 		Log.i("b","wifi");
+		gpsButton.setChecked(false);
+		cellButton.setChecked(false);
 		if(!wifiOn){
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		deviceListener = new DeviceListener(this,1);
@@ -52,47 +73,67 @@ private DeviceListener deviceListener;
 		wifiOn = !wifiOn;
 		return;
 	}
-	public static Context getContext(){
-		return context;
-	}
-	@SuppressLint("NewApi")
-	public void x (View v){
-		Log.i("b","cell");
-		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		int cid = 0;
-		int lac = 0;
-		double lat = 0;
-		double lon = 0;
-		
-		switch( telephonyManager.getPhoneType() ) {
-
-	    case TelephonyManager.PHONE_TYPE_GSM: 
-	         // Handle GSM phone
-	         GsmCellLocation gsmLocation = (GsmCellLocation) telephonyManager.getCellLocation();
-	         cid = gsmLocation.getCid();
-	         lac = gsmLocation.getLac();
-	         break;
-	    case TelephonyManager.PHONE_TYPE_CDMA: 
-	         // Handle CDMA phone
-	    	CdmaCellLocation.requestLocationUpdate();
-	        CdmaCellLocation cdmaLocation = (CdmaCellLocation) telephonyManager.getCellLocation();
-	        CdmaCellLocation.requestLocationUpdate();
-	        cid = (90*cdmaLocation.getBaseStationLatitude())/1296000;
-	        lac = (90*cdmaLocation.getBaseStationLongitude()) / 1296000;
-	        break;
-	    default: 
-	        // can't do cell location
-		}
-		
-	    Log.i(Integer.toString(cid), Integer.toString(lac));
+	
+	public void onAccelButtonClick(){
 		return;
 	}
-	public void onAccelButtonClick(View v){
-		return;
-	}
-	public void onCellButtonClick(View view){
+	
+	public void onCellButtonClick(){
+		gpsButton.setChecked(false);
+		wifiButton.setChecked(false);
 	    Intent intent = new Intent(this, CellActivity.class);
 	    startActivity(intent);
 	}
 	
+	public static Context getContext(){
+		return context;
+	}
+	
+	class GPSButtonListner implements OnCheckedChangeListener{
+
+		@Override
+		public void onCheckedChanged(CompoundButton button, boolean check) {
+			if(check){	
+				onGPSButtonClick();
+			}
+			else {
+				resetView();
+			}
+		}
+	}
+	
+	class WifiButtonListner implements OnCheckedChangeListener{
+
+		@Override
+		public void onCheckedChanged(CompoundButton button, boolean check) {
+			if(check)
+			{	
+				onWifiButtonClick();
+			}
+			else {
+				resetView();
+			}
+		}
+	}
+	
+	class CellButtonListner implements OnCheckedChangeListener{
+
+		@Override
+		public void onCheckedChanged(CompoundButton button, boolean check) {
+			if(check)
+			{	
+				onCellButtonClick();
+			}
+			else {
+				resetView();
+			}
+		}
+	}
+
+	public void resetView(){
+		Intent intent = getIntent();
+		finish();
+		overridePendingTransition(17432576 , 17432579 );
+		startActivity(intent);
+	}
 }
