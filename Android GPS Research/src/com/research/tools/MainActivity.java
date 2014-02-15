@@ -1,4 +1,12 @@
 package com.research.tools;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wink.json4j.JSONArray;
+import org.apache.wink.json4j.JSONException;
+import org.apache.wink.json4j.OrderedJSONObject;
+import org.apache.wink.json4j.JSONObject;
 import android.annotation.SuppressLint;
 
 import android.app.Activity;
@@ -12,6 +20,7 @@ import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.content.Intent;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -78,11 +87,42 @@ private ToggleButton cellButton;
 		return;
 	}
 	
-	public void onCellButtonClick(){
+	public void onCellButtonClick() throws JSONException{
 		gpsButton.setChecked(false);
 		wifiButton.setChecked(false);
-	    Intent intent = new Intent(this, CellActivity.class);
-	    startActivity(intent);
+		String[] huy = new String[2];
+		Postmethod postmethod = new Postmethod(this);
+		long startTime = System.currentTimeMillis();
+		postmethod.execute(huy);
+		
+		while(true){
+			
+			if(postmethod.getresponseText() != null){
+				long endTime = System.currentTimeMillis();
+				long duration = (endTime- startTime)/ 1000;;
+				String JSONResponse = postmethod.getresponseText();
+				JSONObject response = new JSONObject(JSONResponse);
+				
+				
+				double lattitude =  response.getDouble("lat");
+				double longtitude = response.getDouble("lon");
+				
+				TextView lat = (TextView) findViewById(R.id.latitudeTextView);
+				TextView lon = (TextView) findViewById(R.id.longitudeTextView);
+				TextView firstLockTextView = (TextView) findViewById(R.id.timeTillFirstLockTextView);
+				String durationText = Long.toString(duration / (60 * 60)) + ":" + Long.toString((duration / 60) % 60) + ":" + Long.toString(duration % 60 );
+
+				firstLockTextView.setText(durationText);
+				lat.setText(Double.toString(lattitude));
+				lon.setText(Double.toString(longtitude));
+				
+				break;
+			}
+		}
+		
+		
+		//Intent intent = new Intent(this, CellActivity.class);
+	    //startActivity(intent);
 	}
 	
 	public static Context getContext(){
@@ -122,7 +162,12 @@ private ToggleButton cellButton;
 		public void onCheckedChanged(CompoundButton button, boolean check) {
 			if(check)
 			{	
-				onCellButtonClick();
+				try {
+					onCellButtonClick();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else {
 				resetView();
