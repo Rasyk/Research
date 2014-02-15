@@ -7,99 +7,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
-    
-    <TextView
-        android:id="@+id/batteryChangeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="14dp"
-        android:text="0%"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/batteryChangeTextView"
-        android:layout_alignBottom="@+id/batteryChangeTextView"
-        android:layout_alignParentLeft="true"
-        android:text="Change in battery: "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_below="@+id/textView3"
-        android:text="First Lock:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/timeTillFirstLockTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView1"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_alignRight="@+id/batteryChangeTextView"
-        android:text="0:0:0s"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:text="Update Count: "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/updatesTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView5"
-        android:layout_alignBottom="@+id/textView5"
-        android:layout_alignRight="@+id/timeTillFirstLockTextView"
-        android:text="0"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView7"
-        android:layout_below="@+id/textView7"
-        android:text="Time on Cell: "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView8"
-        android:layout_below="@+id/textView8"
-        android:text="Time on Wifi"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView9"
-        android:layout_below="@+id/textView9"
-        android:text="Time on Accel"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/gpsTimeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView8"
-        android:layout_alignRight="@+id/updatesTextView"
-        android:text="0:0:0"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/textView12"
@@ -108,36 +15,7 @@
         android:layout_alignBaseline="@+id/textView8"
         android:layout_alignBottom="@+id/textView8"
         android:layout_alignRight="@+id/gpsTimeTextView"
-        android:text="0:0:0"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/wifiTimeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView10"
-        android:layout_alignRight="@+id/textView12"
-        android:text="0:0:0"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView10"
-        android:layout_alignBottom="@+id/textView10"
-        android:layout_alignRight="@+id/wifiTimeTextView"
-        android:text="0:0:0"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView10"
-        android:layout_below="@+id/textView10"
-        android:layout_marginTop="16dp"
-        android:text="Latitude: "
+        android:text="@string/defaultTimeRunning"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -146,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView15"
         android:layout_below="@+id/textView15"
-        android:text="Longitude"
+        android:text="@string/longitude"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -154,8 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView15"
-        android:layout_alignRight="@+id/textView14"
-        android:text="@string/Latitude"
+        android:layout_alignRight="@+id/wifiTimeTextView"
+        android:text="@string/latitude_value"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -165,7 +43,7 @@
         android:layout_alignBaseline="@+id/textView16"
         android:layout_alignBottom="@+id/textView16"
         android:layout_alignRight="@+id/latitudeTextView"
-        android:text="@string/Longitude"
+        android:text="@string/longitude_value"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ToggleButton
@@ -175,17 +53,8 @@
         android:layout_alignBaseline="@+id/gps_button"
         android:layout_alignBottom="@+id/gps_button"
         android:layout_alignParentRight="true"
-        android:textOff="@string/wifi_button_text" 
-        android:textOn="@string/wifi_button_text"/>
-
-    <ToggleButton
-        android:id="@+id/gps_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:textOff="@string/gps_button_text" 
-        android:textOn="@string/gps_button_text"/>
+        android:textOff="@string/wifi_button_text"
+        android:textOn="@string/wifi_button_text" />
 
     <ToggleButton
         android:id="@+id/cell_button"
@@ -194,17 +63,258 @@
         android:layout_alignBaseline="@+id/gps_button"
         android:layout_alignBottom="@+id/gps_button"
         android:layout_alignParentLeft="true"
-        android:textOff="@string/cell_button_text" 
-        android:textOn="@string/cell_button_text"/>
+        android:textOff="@string/cell_button_text"
+        android:textOn="@string/cell_button_text" />
+
+    <ToggleButton
+        android:id="@+id/gps_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/test_button"
+        android:layout_centerHorizontal="true"
+        android:textOff="@string/gps_button_text"
+        android:textOn="@string/gps_button_text" />
+
+    <Button
+        android:id="@+id/test_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/cell_button"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/gps_button"
+        android:text="@string/run_test" />
+
+    <EditText
+        android:id="@+id/timeToRunTextField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/test_button"
+        android:layout_toRightOf="@+id/test_button"
+        android:ems="10"
+        android:hint="@string/minutes_till_completion"
+        android:inputType="number" >
+
+        <requestFocus />
+    </EditText>
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView5"
-        android:layout_below="@+id/textView5"
-        android:layout_marginTop="34dp"
-        android:text="Time on GPS: "
+        android:layout_alignLeft="@+id/cell_button"
+        android:layout_alignParentTop="true"
+        android:text="@string/time_on_gps"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView7"
+        android:text="@string/time_till_first_lock"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView1"
+        android:text="@string/battery_loss"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView2"
+        android:text="@string/updates"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/gpsTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView7"
+        android:layout_alignBottom="@+id/textView7"
+        android:layout_alignParentRight="true"
+        android:text="@string/defaultTimeRunning"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/gpsFirstLockTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:text="@string/defaultFirstLock"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/gpsBatteryLossTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView2"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignParentRight="true"
+        android:text="@string/defaultBatteryChange"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/gpsUpdatesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView8"
+        android:layout_alignParentRight="true"
+        android:text="@string/defaultUpdates"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView3"
+        android:text="@string/time_on_cell"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView8"
+        android:text="@string/time_till_first_lock"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView10"
+        android:text="@string/battery_loss"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView11"
+        android:text="@string/updates"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/cellFirstLockTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView12"
+        android:text="@string/defaultFirstLock"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/cellBatteryLossTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/cellFirstLockTextView"
+        android:text="@string/defaultBatteryChange"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/cellUpdatesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/cellBatteryLossTextView"
+        android:text="@string/defaultUpdates"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView13"
+        android:text="@string/time_on_wifi"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/wifiTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView15"
+        android:layout_alignParentRight="true"
+        android:text="@string/defaultTimeRunning"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView9"
+        android:layout_marginTop="54dp"
+        android:text="@string/latitude"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView9"
+        android:text="@string/time_till_first_lock"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView19"
+        android:text="@string/battery_loss"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView20"
+        android:text="@string/updates"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/wifiFirstLockTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/wifiTimeTextView"
+        android:text="@string/defaultFirstLock"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/wifiBatteryLossTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/wifiFirstLockTextView"
+        android:text="@string/defaultBatteryChange"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/wifiUpdatesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/wifiBatteryLossTextView"
+        android:text="@string/defaultUpdates"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

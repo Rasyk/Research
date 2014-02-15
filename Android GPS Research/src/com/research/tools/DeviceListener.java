@@ -11,50 +11,37 @@ import android.util.Log;
 import android.widget.TextView;
 
 public class DeviceListener implements LocationListener{
-	private Activity activity;
 	
 	private int updates = 0;
 	private int type;
+	
+	private Location location; 
 	
 	private float initialBattery;
 	
 	private String timeTillFirstUpdate = "";
 	private long timeStarted;
-	public DeviceListener(Activity a,int type){
+	public DeviceListener(int type){
 		this.type = type;
 		this.initialBattery = getCurrentBatteryLevel();
-		this.activity = a;
-		this.timeStarted = System.currentTimeMillis();
+		setTimeStarted();
 	}
 	@Override
 	public void onLocationChanged(Location location) {
-		if(timeTillFirstUpdate.equals("")){
-			TextView text1 = (TextView) activity.findViewById(R.id.timeTillFirstLockTextView);
-			timeTillFirstUpdate = getTimeRunning();
-			text1.setText(timeTillFirstUpdate + "s");
-			
-		}
+		if(timeTillFirstUpdate.equals("")) timeTillFirstUpdate = getTimeRunning() + "s";
 		updates++;
-		updateGUI(location);
+		Log.i("ping","ping");
+		this.location = location;
 		
 	}
-	public void updateGUI(Location location){
-		Log.i("ping","ping");
-		TextView lat = (TextView) activity.findViewById(R.id.latitudeTextView);
-		TextView lon = (TextView) activity.findViewById(R.id.longitudeTextView);
-		TextView time = (TextView) activity.findViewById(R.id.wifiTimeTextView);
-		if(type == 0){
-			time = (TextView) activity.findViewById(R.id.gpsTimeTextView);
-		}
-		TextView batChange = (TextView) activity.findViewById(R.id.batteryChangeTextView);
-		TextView updateCount = (TextView) activity.findViewById(R.id.updatesTextView);
-		
-		lat.setText(Double.toString(location.getLatitude()));
-		lon.setText(Double.toString(location.getLongitude()));
-		time.setText(getTimeRunning());
-		batChange.setText(Integer.toString((int)getBatteryChange()) + "%");
-		updateCount.setText(Integer.toString(updates));
-		
+	public void setTimeStarted(){
+		this.timeStarted = System.currentTimeMillis();
+	}
+	public int getType(){
+		return type;
+	}
+	public Location getLocation(){
+		return location;
 	}
 	@Override
 	public void onProviderDisabled(String provider) {
@@ -68,7 +55,9 @@ public class DeviceListener implements LocationListener{
 		return  level;
 		
 	}
-	
+	public long getTimeRunningLong(){
+		return (System.currentTimeMillis() - timeStarted) / 1000;
+	}
 	@Override
 	public void onProviderEnabled(String provider) {
 		return;
@@ -77,6 +66,9 @@ public class DeviceListener implements LocationListener{
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		
+	}
+	public String getTimeTillFirstUpdate(){
+		return timeTillFirstUpdate;
 	}
 	public int getUpdateCount(){
 		return updates;
