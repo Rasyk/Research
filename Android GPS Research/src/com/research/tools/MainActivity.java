@@ -316,7 +316,7 @@ private Button testButton;
 		}
 		
 		
-//		Intent intent = new Intent(this, CellActivity.class);
+		//Intent intent = new Intent(this, CellActivity.class);
 	    //startActivity(intent);
 	}
 	
@@ -353,6 +353,11 @@ private Button testButton;
 		};
 		timer.scheduleAtFixedRate(timerTaskThree, 0, 1000);
 		
+	}
+	
+	public void drawGraph(View v){
+		Intent intent = new Intent(this, GraphActivity.class);
+		startActivity(intent);
 	}
 	
 	public void onSensorChanged(SensorEvent event){

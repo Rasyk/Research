@@ -23,5 +23,7 @@
     <string name="longitude">Longitude</string>
     <string name="run_test">Run Test</string>
     <string name="minutes_till_completion">Minutes till completion</string>
+    <string name="title_activity_graph">GraphActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
