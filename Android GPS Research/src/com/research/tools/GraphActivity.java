@@ -70,7 +70,6 @@ public class GraphActivity extends Activity {
 		 
 		layout = (LinearLayout) findViewById(R.id.graph1);
 		layout.addView(graphView);
-		
 	}
 
 	

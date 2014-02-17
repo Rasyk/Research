@@ -1,11 +1,16 @@
 package com.research.tools;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +55,10 @@ private ToggleButton cellButton;
 private ToggleButton accelButton;
 private SensorManager sensorManager;
 private Button testButton;
+private float batteryChange;
+private float timeRunning;
+private int numOfUpdate;
+
 
 
 	@Override
@@ -114,6 +123,9 @@ private Button testButton;
 		        		if(getTimeToRun() > 0 && (int)deviceListener.getTimeRunningLong() >= getTimeToRun() * 60){
 		        			timer.cancel();
 		        		}
+		        		batteryChange= deviceListener.getBatteryChange();
+		        		timeRunning= deviceListener.getTime();
+		        		numOfUpdate= deviceListener.getUpdateCount();
 		            }
 		        });
 		    }
@@ -179,6 +191,9 @@ private Button testButton;
 		        		if(getTimeToRun() > 0 && (int)deviceListener.getTimeRunningLong() >= getTimeToRun() * 60){
 		        			timer.cancel();
 		        		}
+		        		batteryChange= deviceListener.getBatteryChange();
+		        		timeRunning= deviceListener.getTime();
+		        		numOfUpdate= deviceListener.getUpdateCount();
 		            }
 		        });
 		    }
@@ -347,6 +362,9 @@ private Button testButton;
 		        		TextView batChange = (TextView) findViewById(R.id.acc_baterry_lost);	
 		        		time.setText(deviceListener.getTimeRunning());
 		        		batChange.setText(Integer.toString((int)deviceListener.getBatteryChange()) + "%");
+		        		batteryChange= deviceListener.getBatteryChange();
+		        		timeRunning= deviceListener.getTime();
+		        		numOfUpdate= deviceListener.getUpdateCount();
 					}
 				});
 			}
@@ -380,29 +398,42 @@ private Button testButton;
 	}
 	
 	class GPSButtonListner implements OnCheckedChangeListener{
-
 		@Override
 		public void onCheckedChanged(CompoundButton button, boolean check) {
-			onGPSButtonClick();
 			if(!check){	
 				resetView();
+				if(numOfUpdate >0 && batteryChange > 2.0){
+					try {
+						recordData("GPS");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
+			onGPSButtonClick();
 		}
 	}
 	
 	class WifiButtonListner implements OnCheckedChangeListener{
-
 		@Override
 		public void onCheckedChanged(CompoundButton button, boolean check) {
-			onWifiButtonClick();
 			if(!check){
 				resetView();
+				if(numOfUpdate>0 && batteryChange > 2.0){
+					try {
+						recordData("Wifi");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
+			onWifiButtonClick();
 		}
 	}
 	
 	class CellButtonListner implements OnCheckedChangeListener{
-
 		@Override
 		public void onCheckedChanged(CompoundButton button, boolean check) {
 			if(check)
@@ -416,12 +447,12 @@ private Button testButton;
 			}
 			else {
 				resetView();
+				//recordData("Cell");
 			}
 		}
 	}
 	
 	class AccButtonListner implements OnCheckedChangeListener{
-
 		@Override
 		public void onCheckedChanged(CompoundButton button, boolean check) {
 			if(check)
@@ -430,18 +461,23 @@ private Button testButton;
 			}
 			else {
 				resetView();
+				if(numOfUpdate>0 && batteryChange > 2.0){
+					try {
+						recordData("Accel");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 	}
 	class TestButtonListener implements OnClickListener{
-
 		@Override
 		public void onClick(View v) {
 			Log.i("b","test");
 			onTestButtonClick();
-			
 		}
-		
 	}
 	
 	public void resetView(){
@@ -450,9 +486,41 @@ private Button testButton;
 			overridePendingTransition(17432576 , 17432579 );
 			startActivity(intent);
 		}
+	
+	public void recordData(String typeOfData) throws IOException{
+		File file = null;
+		if(typeOfData == "GPS"){
+			file = new File("/mnt/sdcard/Download/GPSdata1111111.txt");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+		}else if(typeOfData =="Wifi"){
+			file = new File("/mnt/sdcard/Download/Wifidata1111111.txt");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+		}else if(typeOfData == "Accel"){
+			file = new File("/mnt/sdcard/Download/Acceldata1111111.txt");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+		}else{
+			
+		}
+		
+		FileWriter fw = new FileWriter(file.getAbsoluteFile(),true);
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(String.valueOf(batteryChange/timeRunning));
+		bw.write("\n");
+		bw.close();
+		
+	}
+	
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
 		
 	}
+	
 }

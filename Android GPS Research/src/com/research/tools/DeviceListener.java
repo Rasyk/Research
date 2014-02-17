@@ -81,4 +81,11 @@ public class DeviceListener implements LocationListener{
 	public float getBatteryChange(){
 		return initialBattery - getCurrentBatteryLevel();
 	}
+	public DeviceListener() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public float getTime(){
+		return System.currentTimeMillis() - timeStarted;
+	}
 }
