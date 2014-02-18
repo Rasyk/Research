@@ -334,9 +334,6 @@ protected static int typeOfActivity;
 			}
 		}
 		
-		
-		//Intent intent = new Intent(this, CellActivity.class);
-	    //startActivity(intent);
 	}
 	
 	public void onAccelButtonClick(){
@@ -555,7 +552,7 @@ protected static int typeOfActivity;
 		if(typeOfData == "Seated" || typeOfData =="Running"|| typeOfData =="Vehicle"){
 			bw.write(String.valueOf(velocity));
 		}else {
-			bw.write(String.valueOf(batteryChange/timeRunning));
+			bw.write(Float.toString(batteryChange/timeRunning));
 		}
 		bw.write("\n");
 		bw.close();

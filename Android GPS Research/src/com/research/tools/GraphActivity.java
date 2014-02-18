@@ -30,72 +30,55 @@ public class GraphActivity extends Activity {
 	ArrayList<Double> seated;
 	ArrayList<Double> running;
 	ArrayList<Double> vehicle;
+	ArrayList<Double> gps;
+	ArrayList<Double> wifi;
+	ArrayList<Double> accel;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.graph);
-		// first init data
-		// sin curve
-		int num = 150;
-		GraphViewData[] data = new GraphViewData[num];
-		double v=0;
-		for (int i=0; i<num; i++) {
-		   v += 0.2;
-		   data[i] = new GraphViewData(i, Math.sin(v));
-		}
-		seriesSin = new GraphViewSeries("Sinus curve", new GraphViewSeriesStyle(Color.rgb(200, 50, 00),5), data);
-		 
-		// cos curve
-		data = new GraphViewData[num];
-		v=0;
-		for (int i=0; i<num; i++) {
-		   v += 0.2;
-		   data[i] = new GraphViewData(i, Math.cos(v));
-		}
-		seriesCos = new GraphViewSeries("Cosinus curve", new GraphViewSeriesStyle(Color.rgb(90, 250, 00),5), data);
-		 
-		// random curve
-		num = 1000;
-		data = new GraphViewData[num];
-		v=0;
-		for (int i=0; i<num; i++) {
-		   v += 0.2;
-		   data[i] = new GraphViewData(i, Math.sin(Math.random()*v));
-		}
-		GraphViewSeries seriesRnd = new GraphViewSeries("Random curve", null, data);
-		 
-		/*
-		 * create graph
-		 */
-		graphView = new LineGraphView(
-		      this
-		      , "GraphViewDemo"
-		);
-		// add data
-		graphView.addSeries(seriesCos);
-		graphView.addSeries(seriesSin);
-		//graphView.addSeries(seriesRnd);
-		// optional - set view port, start=2, size=10
-		graphView.setViewPort(2, 10);
-		graphView.setScalable(true);
-		// optional - legend
-		graphView.setShowLegend(true);
-		 
-		layout = (LinearLayout) findViewById(R.id.graph1);
-		layout.addView(graphView);
-	}
-
-	
-	public void drawBatteryConsumption(View v) {
+		
 		graphView = new LineGraphView(
 			      this
 			      , "GraphViewDemo"
 			);
-		// add data
-		graphView.addSeries(seriesCos);
+			// add data
+			//graphView.addSeries(seriesCos);
+			//graphView.addSeries(seriesSin);
+			//graphView.addSeries(seriesRnd);
+			// optional - set view port, start=2, size=10
+			
+			layout = (LinearLayout) findViewById(R.id.graph1);
+			layout.addView(graphView);
+	}
+
+	public void drawBatteryConsumption(View v){
+		graphView = new LineGraphView(
+			      this
+			      , "GraphViewDemo"
+		);
+		GraphViewSeries GPSBattery;
+		GraphViewSeries wifiBattery;
+		GraphViewSeries accelBattery;
+		
+		if((gps = createVelocityDataSet(4)) != null && (wifi = createVelocityDataSet(5)) != null && (accel = createVelocityDataSet(6)) != null)
+		{
+			GPSBattery = new GraphViewSeries("GPS Battery",new GraphViewSeriesStyle(Color.rgb(200, 50, 00),5), createGraphViewData(gps) );
+			graphView.addSeries(GPSBattery);
+			wifiBattery = new GraphViewSeries("Wifi Battery",new GraphViewSeriesStyle(Color.rgb(90, 250, 00),5), createGraphViewData(wifi) );
+			graphView.addSeries(wifiBattery);
+			accelBattery = new GraphViewSeries("Accel Battery",new GraphViewSeriesStyle(Color.rgb(47, 17, 245),5), createGraphViewData(accel) );
+			graphView.addSeries(accelBattery);
+		}
+		
+		graphView.setViewPort(0, 20);
+		graphView.setScalable(true);
+		graphView.setShowLegend(true);
+		 
 		layout.removeAllViews();
 		layout.addView(graphView);
 	}
+
 	
 	public void drawVelocityActivity(View v)
 	{
@@ -110,14 +93,14 @@ public class GraphActivity extends Activity {
 		if((seated = createVelocityDataSet(1)) != null && (running = createVelocityDataSet(2)) != null && (vehicle = createVelocityDataSet(3)) != null ){
 			seatedVelocity  = new GraphViewSeries("Seated Velocity",new GraphViewSeriesStyle(Color.rgb(200, 50, 00),5), createGraphViewData(seated) );
 			graphView.addSeries(seatedVelocity);
-			runningVelocity = new GraphViewSeries("Seated Velocity",new GraphViewSeriesStyle(Color.rgb(90, 250, 00),5), createGraphViewData(running) );
+			runningVelocity = new GraphViewSeries("Running Velocity",new GraphViewSeriesStyle(Color.rgb(90, 250, 00),5), createGraphViewData(running) );
 			graphView.addSeries(runningVelocity);
-			vehicleVelocity = new GraphViewSeries("Seated Velocity",new GraphViewSeriesStyle(Color.rgb( 47, 17, 245),5), createGraphViewData(vehicle) );
+			vehicleVelocity = new GraphViewSeries("Vehicle Velocity",new GraphViewSeriesStyle(Color.rgb( 47, 17, 245),5), createGraphViewData(vehicle) );
 			graphView.addSeries(vehicleVelocity);
 		}
 		
 			
-		graphView.setViewPort(2, 70);
+		graphView.setViewPort(0, 20);
 		graphView.setScalable(true);
 		// optional - legend
 		graphView.setShowLegend(true);
@@ -154,27 +137,28 @@ public class GraphActivity extends Activity {
 			}
 			else if(option ==2){
 				fr = new FileReader("/mnt/sdcard/Download/Runningdata1111111.txt");
-			}else {
+			}else if (option ==3 ) {
 				fr = new FileReader("/mnt/sdcard/Download/Vehicledata1111111.txt");
 			}
 		}
 		catch(FileNotFoundException e)
 		{
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Not enough data to create the Graph")
-			       .setCancelable(false)
-			       .setPositiveButton("Go Back", new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int id) {
-			        	   Intent intent = new Intent(GraphActivity.this, MainActivity.class);
-			       			startActivity(intent);
-			           }
-			       })
-			       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int id) {
-			                dialog.cancel();
-			           }
-			       });
-			builder.show();
+			alertMissingData();
+			return null;
+		}
+		try{
+			if(option ==4){
+				fr = new FileReader("/mnt/sdcard/Download/GPSdata1111111.txt");
+			}
+			else if(option ==5){
+				fr = new FileReader("/mnt/sdcard/Download/Wifidata1111111.txt");
+			}else if (option ==6 ) {
+				fr = new FileReader("/mnt/sdcard/Download/Acceldata1111111.txt");
+			}
+		}
+		catch(FileNotFoundException e)
+		{
+			alertMissingData();
 			return null;
 		}
 		
@@ -199,10 +183,27 @@ public class GraphActivity extends Activity {
 			}catch(IOException ex){
 				ex.printStackTrace();
 			}
-			
 		}
 		return null;
-		
+	}
+	
+	private void alertMissingData()
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Not enough data to create the Graph")
+		       .setCancelable(false)
+		       .setPositiveButton("Go Back", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   Intent intent = new Intent(GraphActivity.this, MainActivity.class);
+		       			startActivity(intent);
+		           }
+		       })
+		       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		builder.show();
 	}
 
 }
