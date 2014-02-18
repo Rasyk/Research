@@ -19,4 +19,25 @@ Research
 
 5. Create the website Report by using static [github webpages](http://pages.github.com/)
 	- By wednesday, we have to have the basic to show DR. Sang
-
+		-Update history
+		-Project description
+			-GPS
+			-Wifi
+			-Run Timer
+			-Acc
+			-Cell
+			-Graph
+		-Background information
+			-APis
+				-LocationManager
+				-Timer
+				-LocationListener
+				-AsyncTask
+				-JSon
+			-external libraries.
+				-GraphView
+				-wink
+			-how to collect data
+				-battery
+				-velocity
+				-Time to lock
