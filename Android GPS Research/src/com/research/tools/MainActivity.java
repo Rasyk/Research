@@ -12,7 +12,9 @@ import org.apache.wink.json4j.JSONObject;
 
 import android.R.integer;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
@@ -58,6 +60,8 @@ private Button testButton;
 private float batteryChange;
 private float timeRunning;
 private int numOfUpdate;
+private double velocity;
+protected static int typeOfActivity;
 
 
 
@@ -343,6 +347,19 @@ private int numOfUpdate;
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL );
 		
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+		final String[] selections ={"Seated", "Running", "Vehicle"};
+		builder.setTitle("Select the type of Activity");
+		builder.setItems(selections, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				MainActivity.typeOfActivity = which;
+			}
+		});
+		builder.show();
+		
 		int duration = Toast.LENGTH_SHORT;
 		Toast toast = Toast.makeText(context, "Test Started", duration);
 		toast.show();
@@ -365,6 +382,12 @@ private int numOfUpdate;
 		        		batteryChange= deviceListener.getBatteryChange();
 		        		timeRunning= deviceListener.getTime();
 		        		numOfUpdate= deviceListener.getUpdateCount();
+		        		try {
+							recordData(selections[typeOfActivity]);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				});
 			}
@@ -385,7 +408,7 @@ private int numOfUpdate;
 			double y = (double) event.values[1];
 			double z = (double) event.values[2];
 			
-			double velocity = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+			velocity = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
 			TextView velocityText = (TextView) findViewById(R.id.velocityMag);
 			velocityText.setText(String.valueOf(velocity));
 			
@@ -505,13 +528,35 @@ private int numOfUpdate;
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-		}else{
-			
 		}
+		else if(typeOfData =="Seated"){
+			file = new File("/mnt/sdcard/Download/Seateddata1111111.txt");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+		}
+		else if(typeOfData =="Running"){
+			file = new File("/mnt/sdcard/Download/Runningdata1111111.txt");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+		}
+		else if(typeOfData == "Vehicle"){
+			file = new File("/mnt/sdcard/Download/Vehicledata1111111.txt");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+		}
+		else{
 		
+		}
 		FileWriter fw = new FileWriter(file.getAbsoluteFile(),true);
 		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(String.valueOf(batteryChange/timeRunning));
+		if(typeOfData == "Seated" || typeOfData =="Running"|| typeOfData =="Vehicle"){
+			bw.write(String.valueOf(velocity));
+		}else {
+			bw.write(String.valueOf(batteryChange/timeRunning));
+		}
 		bw.write("\n");
 		bw.close();
 		

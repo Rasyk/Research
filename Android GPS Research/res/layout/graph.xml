@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/graph1"
         android:layout_alignParentBottom="true"
+        android:onClick="drawVelocityActivity"
         android:text="Velocity" />
 
     <Button
