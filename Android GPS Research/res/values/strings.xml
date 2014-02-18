@@ -25,5 +25,7 @@
     <string name="minutes_till_completion">Minutes till completion</string>
     <string name="title_activity_graph">GraphActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="time_on_acc">Time on Acc:</string>
+    <string name="velocity">Velocity</string>
 
 </resources>

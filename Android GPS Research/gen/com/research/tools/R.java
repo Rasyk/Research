@@ -41,7 +41,7 @@ public final class R {
         public static final int gpsTimeTextView=0x7f080002;
         public static final int gpsUpdatesTextView=0x7f080011;
         public static final int gps_button=0x7f08001f;
-        public static final int graph=0x7f080023;
+        public static final int graph=0x7f080022;
         public static final int graph1=0x7f080028;
         public static final int latitudeTextView=0x7f080003;
         public static final int longitudeTextView=0x7f080006;
@@ -62,7 +62,7 @@ public final class R {
         public static final int textView8=0x7f080001;
         public static final int textView9=0x7f080014;
         public static final int timeToRunTextField=0x7f08000a;
-        public static final int time_on_acc=0x7f080022;
+        public static final int time_on_acc=0x7f080023;
         public static final int velocityMag=0x7f08001d;
         public static final int velocity_motion_activity=0x7f080029;
         public static final int velocity_text=0x7f08001b;
@@ -99,6 +99,7 @@ public final class R {
         public static final int longitude_value=0x7f050011;
         public static final int minutes_till_completion=0x7f050015;
         public static final int run_test=0x7f050014;
+        public static final int time_on_acc=0x7f050018;
         public static final int time_on_cell=0x7f05000e;
         public static final int time_on_gps=0x7f05000a;
         public static final int time_on_wifi=0x7f05000f;
@@ -106,6 +107,7 @@ public final class R {
         public static final int title_activity_graph=0x7f050016;
         public static final int title_activity_test=0x7f050005;
         public static final int updates=0x7f05000d;
+        public static final int velocity=0x7f050019;
         public static final int wifi_button_text=0x7f050003;
     }
     public static final class style {

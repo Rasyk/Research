@@ -247,8 +247,7 @@
         android:id="@+id/acc_time_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView21"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/textView21"
         android:text="Time on Acc"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -275,7 +274,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/test_button"
-        android:layout_alignRight="@+id/acc_time_text"
+        android:layout_toRightOf="@+id/cell_button"
         android:textOff="@string/gps_button_text"
         android:textOn="@string/gps_button_text" />
 
@@ -293,7 +292,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/test_button"
-        android:layout_toLeftOf="@+id/time_on_acc"
+
         android:layout_toRightOf="@+id/accelerometer_button"
         android:textOff="@string/wifi_button_text"
         android:textOn="@string/wifi_button_text" />
