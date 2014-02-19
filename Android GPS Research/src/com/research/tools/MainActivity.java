@@ -481,7 +481,7 @@ protected static int typeOfActivity;
 			}
 			else {
 				resetView();
-				if(numOfUpdate>0 && batteryChange > 2.0){
+				if(batteryChange > 0.0){
 					try {
 						recordData("Accel");
 					} catch (IOException e) {
