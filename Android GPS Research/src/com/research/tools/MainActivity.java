@@ -361,7 +361,7 @@ protected static int typeOfActivity;
 		Toast toast = Toast.makeText(context, "Test Started", duration);
 		toast.show();
 		
-		deviceListener = new DeviceListener(3);
+		deviceListener = new DeviceListener(1);
 		final Handler handler = new Handler();
 		timer = new Timer(false);
 		
