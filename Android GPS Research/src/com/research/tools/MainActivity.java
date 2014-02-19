@@ -211,6 +211,14 @@ protected static int typeOfActivity;
 	}
 	public void onTestButtonClick(){
 		if(!testOn){
+			if(getTimeToRun() < 0){
+				Context context = getApplicationContext();
+				CharSequence text = "Please enter time to test.";
+				int duration = Toast.LENGTH_SHORT;
+				Toast toast = Toast.makeText(context, text, duration);
+				toast.show();
+				return;
+    		}
 		Context context = getApplicationContext();
 		CharSequence text = "Test started, please wait " + 2 * getTimeToRun() +" minutes.";
 		int duration = Toast.LENGTH_SHORT;
