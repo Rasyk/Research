@@ -13,7 +13,6 @@ import android.widget.TextView;
 public class DeviceListener implements LocationListener{
 	
 	private int updates = 0;
-	private int type;
 	
 	private Location location; 
 	
@@ -21,9 +20,8 @@ public class DeviceListener implements LocationListener{
 	
 	private String timeTillFirstUpdate = "";
 	private long timeStarted;
-	public DeviceListener(int type){
-		this.type = type;
-		this.initialBattery = getCurrentBatteryLevel();
+	public DeviceListener(){
+		setBatteryChange();
 		setTimeStarted();
 	}
 	@Override
@@ -37,15 +35,14 @@ public class DeviceListener implements LocationListener{
 	public void setTimeStarted(){
 		this.timeStarted = System.currentTimeMillis();
 	}
-	public int getType(){
-		return type;
+	public void setUpdates(int i){
+		this.updates = i;
 	}
 	public Location getLocation(){
 		return location;
 	}
 	@Override
 	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
 		
 	}
 	public float getCurrentBatteryLevel(){
@@ -57,6 +54,9 @@ public class DeviceListener implements LocationListener{
 	}
 	public long getTimeRunningLong(){
 		return (System.currentTimeMillis() - timeStarted) / 1000;
+	}
+	public void setBatteryChange(){
+		this.initialBattery = getCurrentBatteryLevel();
 	}
 	@Override
 	public void onProviderEnabled(String provider) {
@@ -81,10 +81,6 @@ public class DeviceListener implements LocationListener{
 	public float getBatteryChange(){
 		return initialBattery - getCurrentBatteryLevel();
 	}
-	public DeviceListener() {
-		// TODO Auto-generated constructor stub
-	}
-	
 	public float getTime(){
 		return System.currentTimeMillis() - timeStarted;
 	}

@@ -50,6 +50,8 @@ private Timer timer;
 private TimerTask timerTaskOne;
 private TimerTask timerTaskTwo;
 private TimerTask timerTaskThree;
+private TimerTask timerTaskFour;
+private TimerTask timerTaskFive;
 
 private ToggleButton gpsButton;
 private ToggleButton wifiButton;
@@ -99,7 +101,7 @@ protected static int typeOfActivity;
 			Toast toast = Toast.makeText(context, text, duration);
 			toast.show();
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		deviceListener = new DeviceListener(0);
+		deviceListener = new DeviceListener();
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, deviceListener);
 		final Handler handler = new Handler();
 		timer = new Timer(false);
@@ -150,6 +152,13 @@ protected static int typeOfActivity;
         }
 		return timeToRun;
 	}
+	public void startAccel(){
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL );
+	}
+	public void stopAccel(){
+		sensorManager.unregisterListener(this);
+	}
 	public void onWifiButtonClick(){
 		Log.i("b","wifi");
 		gpsButton.setChecked(false);
@@ -164,7 +173,7 @@ protected static int typeOfActivity;
 			Toast toast = Toast.makeText(context, text, duration);
 			toast.show();
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		deviceListener = new DeviceListener(1);
+		deviceListener = new DeviceListener();
 		locationManager.removeUpdates(deviceListener);
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, deviceListener);
 		final Handler handler = new Handler();
@@ -175,8 +184,6 @@ protected static int typeOfActivity;
 		        handler.post(new Runnable() {
 		            @Override
 		            public void run() {
-		            	
-		            	
 		            	TextView lat = (TextView) findViewById(R.id.latitudeTextView);
 		        		TextView lon = (TextView) findViewById(R.id.longitudeTextView);
 		        		TextView time = (TextView) findViewById(R.id.wifiTimeTextView);
@@ -210,6 +217,7 @@ protected static int typeOfActivity;
 		return;
 	}
 	public void onTestButtonClick(){
+		final String[] selections ={"Seated", "Running", "Vehicle"};
 		if(!testOn){
 			if(getTimeToRun() < 0){
 				Context context = getApplicationContext();
@@ -220,14 +228,10 @@ protected static int typeOfActivity;
 				return;
     		}
 		Context context = getApplicationContext();
-		CharSequence text = "Test started, please wait " + 2 * getTimeToRun() +" minutes.";
+		CharSequence text = "Test started, please wait " + 5 * getTimeToRun() +" minutes.";
 		int duration = Toast.LENGTH_SHORT;
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
-		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		deviceListener = new DeviceListener(1);
-		locationManager.removeUpdates(deviceListener);
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, deviceListener);
 		final Handler handler = new Handler();
 		timer = new Timer(false);
 		timerTaskOne = new TimerTask() {
@@ -258,7 +262,13 @@ protected static int typeOfActivity;
 		        			locationManager.removeUpdates(deviceListener);
 		        			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, deviceListener);
 		        			deviceListener.setTimeStarted();
+		        			deviceListener.setBatteryChange();
+		        			deviceListener.setUpdates(0);
 		        			timer.scheduleAtFixedRate(timerTaskTwo, 0, 1000);
+		        			CharSequence text = "GPS test started .";
+							int duration = Toast.LENGTH_SHORT;
+							Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+							toast.show();
 		        			
 		        		}
 		            }
@@ -289,19 +299,134 @@ protected static int typeOfActivity;
 		        		updateCount.setText(Integer.toString(deviceListener.getUpdateCount()));
 		        		if(getTimeToRun() > 0 && (int)deviceListener.getTimeRunningLong() >= getTimeToRun() * 60){
 		        			timer.cancel();
+		        			timer = new Timer(false);
+		        			deviceListener.setTimeStarted();
+		        			deviceListener.setBatteryChange();
+		        			locationManager.removeUpdates(deviceListener);
+		        			startAccel();
+		        			CharSequence text = "Seated accelerometer test started .";
+							int duration = Toast.LENGTH_SHORT;
+							Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+							toast.show();
+		        			timer.scheduleAtFixedRate(timerTaskThree, 0, 1000);
 		        		}
 		            }
 		        });
 		        
 		    }
 		};
+		timerTaskThree = new TimerTask(){
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						TextView time = (TextView) findViewById(R.id.time_on_acc);
+		        		TextView batChange = (TextView) findViewById(R.id.acc_baterry_lost);	
+		        		time.setText(deviceListener.getTimeRunning());
+		        		batChange.setText(Integer.toString((int)deviceListener.getBatteryChange()) + "%");
+		        		batteryChange= deviceListener.getBatteryChange();
+		        		timeRunning= deviceListener.getTime();
+		        		numOfUpdate= deviceListener.getUpdateCount();
+		        		try {
+							recordData(selections[0]);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		        		if(getTimeToRun() > 0 && (int)deviceListener.getTimeRunningLong() >= getTimeToRun() * 60){
+		        			timer.cancel();
+		        			timer = new Timer(false);
+		        			CharSequence text = "Running accelerometer test started.";
+							int duration = Toast.LENGTH_SHORT;
+							Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+							toast.show();
+		        			timer.scheduleAtFixedRate(timerTaskFour, 0, 1000);
+		        		}
+					}
+				});
+			}
+		};
+		timerTaskFour = new TimerTask(){
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						Log.i("asd", "Running accel test");
+						TextView time = (TextView) findViewById(R.id.time_on_acc);
+		        		TextView batChange = (TextView) findViewById(R.id.acc_baterry_lost);	
+		        		time.setText(deviceListener.getTimeRunning());
+		        		batChange.setText(Integer.toString((int)deviceListener.getBatteryChange()) + "%");
+		        		batteryChange= deviceListener.getBatteryChange();
+		        		timeRunning= deviceListener.getTime();
+		        		numOfUpdate= deviceListener.getUpdateCount();
+		        		try {
+							recordData(selections[1]);
+						} catch (IOException e) {
+							Log.i("Error", "Running accel test");
+						}
+		        		if(getTimeToRun() > 0 && (int)deviceListener.getTimeRunningLong() >= 2 * getTimeToRun() * 60){
+		        			timer.cancel();
+		        			timer = new Timer(false);
+		        			CharSequence text = "Driving accelerometer test started .";
+							int duration = Toast.LENGTH_SHORT;
+							Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+							toast.show();
+		        			timer.scheduleAtFixedRate(timerTaskFive, 0, 1000);
+		        		}
+					}
+				});
+			}
+		};
+		timerTaskFive = new TimerTask(){
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						TextView time = (TextView) findViewById(R.id.time_on_acc);
+		        		TextView batChange = (TextView) findViewById(R.id.acc_baterry_lost);	
+		        		time.setText(deviceListener.getTimeRunning());
+		        		batChange.setText(Integer.toString((int)deviceListener.getBatteryChange()) + "%");
+		        		batteryChange= deviceListener.getBatteryChange();
+		        		timeRunning= deviceListener.getTime();
+		        		try {
+							recordData(selections[2]);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		        		if(getTimeToRun() > 0 && (int)deviceListener.getTimeRunningLong() >= 3 * getTimeToRun() * 60){
+		        			timer.cancel();
+		        			stopAccel();
+		        			
+		        			
+		        		}
+					}
+				});
+			}
+		};
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		deviceListener = new DeviceListener();
+		locationManager.removeUpdates(deviceListener);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, deviceListener);
 		timer.scheduleAtFixedRate(timerTaskOne, 0,1000);
+    	text = "Wifi test started.";
+		toast = Toast.makeText(getApplicationContext(), text, duration);
+		toast.show();
+
+		
 		} else {
 			Context context = getApplicationContext();
 			CharSequence text = "Test canceled.";
 			int duration = Toast.LENGTH_SHORT;
 			Toast toast = Toast.makeText(context, text, duration);
 			toast.show();
+			resetView();
 			timer.cancel();
 		}
 		
@@ -369,7 +494,7 @@ protected static int typeOfActivity;
 		Toast toast = Toast.makeText(context, "Test Started", duration);
 		toast.show();
 		
-		deviceListener = new DeviceListener(1);
+		deviceListener = new DeviceListener();
 		final Handler handler = new Handler();
 		timer = new Timer(false);
 		
@@ -489,7 +614,7 @@ protected static int typeOfActivity;
 			}
 			else {
 				resetView();
-				if(numOfUpdate>0 && batteryChange > 2.0){
+				if(batteryChange > 0.0){
 					try {
 						recordData("Accel");
 					} catch (IOException e) {
