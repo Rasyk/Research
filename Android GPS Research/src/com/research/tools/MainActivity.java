@@ -57,6 +57,7 @@ private ToggleButton gpsButton;
 private ToggleButton wifiButton;
 private ToggleButton cellButton;
 private ToggleButton accelButton;
+private ToggleButton algroButton;
 private SensorManager sensorManager;
 private Button testButton;
 private float batteryChange;
@@ -78,19 +79,23 @@ protected static int typeOfActivity;
 		wifiButton = (ToggleButton) findViewById(R.id.wifi_button);
 		cellButton = (ToggleButton) findViewById(R.id.cell_button);
 		accelButton =  (ToggleButton) findViewById(R.id.accelerometer_button);
+		algroButton = (ToggleButton) findViewById(R.id.algorithm_button);
 		testButton = (Button) findViewById(R.id.test_button);
+		
 		
 		gpsButton.setOnCheckedChangeListener(new GPSButtonListner());
 		wifiButton.setOnCheckedChangeListener(new WifiButtonListner());
 		cellButton.setOnCheckedChangeListener(new CellButtonListner());
 		testButton.setOnClickListener(new TestButtonListener());
 		accelButton.setOnCheckedChangeListener(new AccButtonListner());
+		algroButton.setOnCheckedChangeListener(new AlgorithmButtonListener());
 	}
 	public void onGPSButtonClick(){
 		Log.i("b","gps");
 		wifiButton.setChecked(false);
 		cellButton.setChecked(false);
 		accelButton.setChecked(false);
+		
 		
 		if(!gpsOn){
 			CharSequence text = "Test started, please wait " + getTimeToRun() +" minutes.";
@@ -625,6 +630,25 @@ protected static int typeOfActivity;
 			}
 		}
 	}
+	
+	class AlgorithmButtonListener implements OnCheckedChangeListener{
+		@Override
+		public void onCheckedChanged(CompoundButton button, boolean check){
+			if(check){
+				onAlgorithmClick();
+			}
+			else{
+				resetView();
+				if(batteryChange >0.0){
+					try{
+						recordData("Algorithm");
+					}catch(IOException exception){
+						exception.printStackTrace();
+					}
+				}
+			}
+		}
+	}
 	class TestButtonListener implements OnClickListener{
 		@Override
 		public void onClick(View v) {
@@ -698,4 +722,88 @@ protected static int typeOfActivity;
 		
 	}
 	
+	/**
+	 * The algorithm from the paper implementation
+	 * 1st: Get the vector magnitude
+	 * 		From 9 to 11: this is at rest
+	 * 		less than 9 or greater than 11: means moving
+	 * if( moving =true)
+	 * 		add the listener to the gps
+	 * else
+	 * 		create timer count for 1 mins
+	 * 		After 1 mins if(moving = false)
+	 *							remove the listener.
+	 *
+	 */
+	public void onAlgorithmClick(){
+		long startTime;
+		long endTime;
+		startTime = System.nanoTime();
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		deviceListener = new DeviceListener();
+		
+		while(true)
+		{
+			if(checkMoving()== true)
+			{
+				// add listener to the gps
+				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, deviceListener);
+				sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+				sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL );
+				// get lat and long, display them
+				
+				TextView lat = (TextView) findViewById(R.id.latitudeTextView);
+				TextView lon = (TextView) findViewById(R.id.longitudeTextView);
+				TextView time = (TextView) findViewById(R.id.gpsTimeTextView);
+				TextView batChange = (TextView) findViewById(R.id.gpsBatteryLossTextView);
+				TextView updateCount = (TextView) findViewById(R.id.gpsUpdatesTextView);
+				TextView firstLock = (TextView) findViewById(R.id.gpsFirstLockTextView);
+
+				if(deviceListener.getLocation() != null){
+				lat.setText(Double.toString(deviceListener.getLocation().getLatitude()));
+				lon.setText(Double.toString(deviceListener.getLocation().getLongitude()));
+				}
+				if(!deviceListener.getTimeTillFirstUpdate().equals("")) firstLock.setText(deviceListener.getTimeTillFirstUpdate());
+				time.setText(deviceListener.getTimeRunning());
+				batChange.setText(Integer.toString((int)deviceListener.getBatteryChange()) + "%");
+				updateCount.setText(Integer.toString(deviceListener.getUpdateCount()));
+				
+				//make new startTime
+				startTime = System.nanoTime();
+				
+			}
+			else {
+				endTime = System.nanoTime();
+				long timer = endTime - startTime;
+				if(timer >= 10000 )
+				{
+					// remove the listener to stop GPS and save battery
+					locationManager.removeUpdates(deviceListener);
+					
+					// make new startTime
+					startTime = System.nanoTime();
+					
+				}
+				else 
+				{
+					// doing nothing because we not stay at rest for at least 10 second yet
+				}
+			}
+		}
+		
+		
+	}
+	
+	public boolean checkMoving(){
+		
+		
+		if(velocity >9 && velocity <11)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 }

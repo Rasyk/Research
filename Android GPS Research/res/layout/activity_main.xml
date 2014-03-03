@@ -41,7 +41,6 @@
         android:id="@+id/test_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/cell_button"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/textView16"
         android:text="@string/run_test" />
@@ -51,6 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/test_button"
+        android:layout_toLeftOf="@+id/toggleButton1"
         android:layout_toRightOf="@+id/test_button"
         android:ems="10"
         android:hint="@string/minutes_till_completion"
@@ -274,6 +274,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/test_button"
+        android:layout_alignRight="@+id/textView8"
         android:layout_toRightOf="@+id/cell_button"
         android:textOff="@string/gps_button_text"
         android:textOn="@string/gps_button_text" />
@@ -284,27 +285,17 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/test_button"
         android:layout_toRightOf="@+id/gps_button"
-        android:textOff="ACC"
-        android:textOn="ACC" />
+        android:textOff="Acc"
+        android:textOn="Acc" />
 
     <ToggleButton
         android:id="@+id/wifi_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/test_button"
-
         android:layout_toRightOf="@+id/accelerometer_button"
         android:textOff="@string/wifi_button_text"
         android:textOn="@string/wifi_button_text" />
-
-    <ToggleButton
-        android:id="@+id/cell_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/test_button"
-        android:layout_alignParentLeft="true"
-        android:textOff="@string/cell_button_text"
-        android:textOn="@string/cell_button_text" />
 
     <Button
         android:id="@+id/graph"
@@ -351,5 +342,24 @@
         android:layout_below="@+id/wifiBatteryLossTextView"
         android:text="@string/defaultUpdates"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ToggleButton
+        android:id="@+id/cell_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/graph"
+        android:layout_alignBottom="@+id/graph"
+        android:textOff="@string/cell_button_text"
+        android:textOn="@string/cell_button_text" />
+
+    <ToggleButton
+        android:id="@+id/algorithm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/timeToRunTextField"
+        android:layout_alignBottom="@+id/timeToRunTextField"
+        android:layout_alignRight="@+id/graph"
+        android:textOff="Al"
+        android:textOn="Al" />
 
 </RelativeLayout>
