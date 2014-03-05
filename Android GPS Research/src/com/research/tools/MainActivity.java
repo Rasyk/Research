@@ -24,7 +24,9 @@ import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.sax.EndElementListener;
 import android.util.Log;
+import android.util.TimingLogger;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -64,6 +66,7 @@ private float batteryChange;
 private float timeRunning;
 private int numOfUpdate;
 private double velocity;
+private long lastTimeMoving;
 
 protected static int typeOfActivity;
 
@@ -551,6 +554,9 @@ private int updates;
 			velocity = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
 			TextView velocityText = (TextView) findViewById(R.id.velocityMag);
 			velocityText.setText(String.valueOf(velocity));
+			if(checkMoving()){
+				lastTimeMoving = System.currentTimeMillis();
+			}
 			
 		}
 	}
@@ -665,9 +671,16 @@ private int updates;
 	public void resetView(){
 		Intent intent = getIntent();
 		finish();
-			overridePendingTransition(17432576 , 17432579 );
-			startActivity(intent);
+		overridePendingTransition(17432576 , 17432579 );
+		startActivity(intent);
+		if(timer != null){
+			timer.cancel();
 		}
+		if(locationManager !=null)
+		{
+			locationManager.removeUpdates(deviceListener);
+		}
+	}
 	
 	public void recordData(String typeOfData) throws IOException{
 		File file = null;
@@ -769,17 +782,36 @@ private int updates;
 		        handler.post(new Runnable() {
 		            @Override
 		            public void run() {
-						if(checkMoving() && !getWaitingForGPS()){
+						if(checkMoving()){
 							locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, deviceListener);
 							setWaitingForGPS(true);
+							
+							
 						}
+						else
+						{
+							long now = System.currentTimeMillis();
+							Log.i("RunningTime", Long.toString(now- lastTimeMoving));
+							if(now - lastTimeMoving > 10 * 1000){
+								locationManager.removeUpdates(deviceListener);
+								Log.e("algorithmTimer", "deactivate the location manager");
+								try {
+									Thread.sleep(10000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								lastTimeMoving = System.currentTimeMillis();
+							}
+							
+						}
+						/**
 						if(deviceListener.getUpdateCount() > getUpdates()){
 							incrementUpdates();
 							locationManager.removeUpdates(deviceListener);
 							// get lat and long, display them
-							
-							
 						}
+						*/
+						
 						TextView lat = (TextView) findViewById(R.id.latitudeTextView);
 						TextView lon = (TextView) findViewById(R.id.longitudeTextView);
 						TextView time = (TextView) findViewById(R.id.gpsTimeTextView);
@@ -809,10 +841,12 @@ private int updates;
 		
 		if(velocity >9 && velocity <11)
 		{
+			
 			return false;
 		}
 		else
 		{
+			Log.i("Moving","hello");
 			return true;
 		}
 	}
