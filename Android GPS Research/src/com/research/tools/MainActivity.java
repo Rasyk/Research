@@ -64,7 +64,12 @@ private float batteryChange;
 private float timeRunning;
 private int numOfUpdate;
 private double velocity;
+
 protected static int typeOfActivity;
+
+//Variables for the algorithm.
+private boolean isWaitingForGPS;
+private int updates;
 
 
 
@@ -722,6 +727,18 @@ protected static int typeOfActivity;
 		
 	}
 	
+	public boolean getWaitingForGPS(){
+		return isWaitingForGPS;
+	}
+	public void setWaitingForGPS(boolean b){
+		isWaitingForGPS = b;
+	}
+	public void incrementUpdates(){
+		updates++;
+	}
+	public int getUpdates(){
+		return updates;
+	}
 	/**
 	 * The algorithm from the paper implementation
 	 * 1st: Get the vector magnitude
@@ -736,61 +753,54 @@ protected static int typeOfActivity;
 	 *
 	 */
 	public void onAlgorithmClick(){
-		long startTime;
-		long endTime;
-		startTime = System.nanoTime();
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		deviceListener = new DeviceListener();
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL );
 		
-		while(true)
-		{
-			if(checkMoving()== true)
-			{
-				// add listener to the gps
-				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, deviceListener);
-				sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-				sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL );
-				// get lat and long, display them
-				
-				TextView lat = (TextView) findViewById(R.id.latitudeTextView);
-				TextView lon = (TextView) findViewById(R.id.longitudeTextView);
-				TextView time = (TextView) findViewById(R.id.gpsTimeTextView);
-				TextView batChange = (TextView) findViewById(R.id.gpsBatteryLossTextView);
-				TextView updateCount = (TextView) findViewById(R.id.gpsUpdatesTextView);
-				TextView firstLock = (TextView) findViewById(R.id.gpsFirstLockTextView);
-
-				if(deviceListener.getLocation() != null){
-				lat.setText(Double.toString(deviceListener.getLocation().getLatitude()));
-				lon.setText(Double.toString(deviceListener.getLocation().getLongitude()));
-				}
-				if(!deviceListener.getTimeTillFirstUpdate().equals("")) firstLock.setText(deviceListener.getTimeTillFirstUpdate());
-				time.setText(deviceListener.getTimeRunning());
-				batChange.setText(Integer.toString((int)deviceListener.getBatteryChange()) + "%");
-				updateCount.setText(Integer.toString(deviceListener.getUpdateCount()));
-				
-				//make new startTime
-				startTime = System.nanoTime();
-				
-			}
-			else {
-				endTime = System.nanoTime();
-				long timer = endTime - startTime;
-				if(timer >= 10000 )
-				{
-					// remove the listener to stop GPS and save battery
-					locationManager.removeUpdates(deviceListener);
-					
-					// make new startTime
-					startTime = System.nanoTime();
-					
-				}
-				else 
-				{
-					// doing nothing because we not stay at rest for at least 10 second yet
-				}
-			}
-		}
+		updates = 0;
+		isWaitingForGPS = false;
 		
+		final Handler handler = new Handler();
+		timer = new Timer(false);
+		timerTaskOne = new TimerTask() {
+		    @Override
+		    public void run() {
+		        handler.post(new Runnable() {
+		            @Override
+		            public void run() {
+						if(checkMoving() && !getWaitingForGPS()){
+							locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, deviceListener);
+							setWaitingForGPS(true);
+						}
+						if(deviceListener.getUpdateCount() > getUpdates()){
+							incrementUpdates();
+							locationManager.removeUpdates(deviceListener);
+							// get lat and long, display them
+							
+							
+						}
+						TextView lat = (TextView) findViewById(R.id.latitudeTextView);
+						TextView lon = (TextView) findViewById(R.id.longitudeTextView);
+						TextView time = (TextView) findViewById(R.id.gpsTimeTextView);
+						TextView batChange = (TextView) findViewById(R.id.gpsBatteryLossTextView);
+						TextView updateCount = (TextView) findViewById(R.id.gpsUpdatesTextView);
+						TextView firstLock = (TextView) findViewById(R.id.gpsFirstLockTextView);
+		
+						if(deviceListener.getLocation() != null){
+						lat.setText(Double.toString(deviceListener.getLocation().getLatitude()));
+						lon.setText(Double.toString(deviceListener.getLocation().getLongitude()));
+						}
+						if(!deviceListener.getTimeTillFirstUpdate().equals("")) firstLock.setText(deviceListener.getTimeTillFirstUpdate());
+						time.setText(deviceListener.getTimeRunning());
+						batChange.setText(Integer.toString((int)deviceListener.getBatteryChange()) + "%");
+						updateCount.setText(Integer.toString(deviceListener.getUpdateCount()));
+						setWaitingForGPS(false);
+		            }
+		        });
+		    }
+		};
+		timer.scheduleAtFixedRate(timerTaskOne, 0, 1000);
 		
 	}
 	
