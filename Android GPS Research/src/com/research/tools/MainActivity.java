@@ -808,7 +808,7 @@ private int updates;
 								locationManager.removeUpdates(deviceListener);
 								Log.e("algorithmTimer", "deactivate the location manager");
 								try {
-									Thread.sleep(3*60*1000);
+									Thread.sleep(60*1000);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}

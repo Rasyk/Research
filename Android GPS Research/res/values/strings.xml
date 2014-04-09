@@ -29,6 +29,8 @@
     <string name="velocity">Velocity</string>
     <!-- Mapping Features -->
     <string name="send_location">S E N D</string>
+    <string name="algorithm">A L G O R I T H M</string>
+    <string name="API">A P I</string>
     <string name="str_btn_find_location">F</string>
     <string name="hnt_et_location">Enter location</string>
     <string name="title_activity_map_mssg">MapMssgActivity</string>

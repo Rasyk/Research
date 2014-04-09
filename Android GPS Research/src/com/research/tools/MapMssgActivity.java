@@ -1,6 +1,10 @@
 package com.research.tools;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 
 import android.location.Address;
@@ -8,6 +12,7 @@ import android.location.Geocoder;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,6 +47,8 @@ public class MapMssgActivity extends FragmentActivity  {
     // Google Map
     private GoogleMap googleMap;
     private MarkerOptions markerOptions;
+    private ArrayList<MarkerOptions> algorithmCoordinatesArrayList;
+    private ArrayList<MarkerOptions> apiCoordinatesArrayList;
     private LatLng latLng;
     Location location;
 
@@ -58,6 +65,7 @@ public class MapMssgActivity extends FragmentActivity  {
             e.printStackTrace();
         }
         button_listener();
+        button_listener2();
 
         //getting btn_find_location
         Button btn_find = (Button) findViewById(R.id.btn_find_location);
@@ -133,7 +141,6 @@ public class MapMssgActivity extends FragmentActivity  {
     private void centerMapOnMyLocation() {
 
         googleMap.setMyLocationEnabled(false);
-        googleMap.clear();
         Location location = getLocation();
         LatLng myLocation = null;
         if (location != null) {
@@ -145,7 +152,7 @@ public class MapMssgActivity extends FragmentActivity  {
 
             googleMap.addMarker(markerOptions);
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation,
-                    (float) 17.0));
+                    (float) 8.0));
         }
         else
         {
@@ -155,40 +162,77 @@ public class MapMssgActivity extends FragmentActivity  {
     }
 
     void button_listener() {
-        Button button = (Button) findViewById(R.id.take_picture);
+        Button button = (Button) findViewById(R.id.algorithm_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SnapshotReadyCallback callback = new SnapshotReadyCallback() {
-                    Bitmap bitmap;
-
-                    @Override
-                    public void onSnapshotReady(Bitmap snapshot) {
-                        // TODO Auto-generated method stub
-                        bitmap = snapshot;
-                        try {
-                               FileOutputStream out = new FileOutputStream("/mnt/sdcard/Download/TeleSensors.map.png");
-                               bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-                               Intent intent = new Intent();
-                               String filepath = "/mnt/sdcard/Download/TeleSensors.map.png";
-                               String latlongString;
-                               latlongString = Double.toString(markerOptions.getPosition().latitude) +"M"+Double.toString(markerOptions.getPosition().longitude);
-                               intent.putExtra("message", latlongString);
-                               intent.putExtra("mapPath", filepath);
-                               setResult(RESULT_OK, intent);
-                               
-                               finish();
-                               overridePendingTransition(17432576 , 17432579 );
-                        } catch (Exception e) {
-                               e.printStackTrace();
-                        }
-                    }
-                };
-
-                googleMap.snapshot(callback);
+                /**
+                 * Open the text file and put markers in there
+                 */
+            	createMarkers(1);
+            	
+            }
+        });
+    }
+    
+    void button_listener2() {
+        Button button = (Button) findViewById(R.id.api_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * open the text file and put markers in there
+                 */
+            	createMarkers(2);
 
             }
         });
+    }
+    
+    public void createMarkers(int option)
+    {
+    	FileReader fr = null;
+    	try{
+	    	if(option == 1){
+	    		fr = new FileReader("/mnt/sdcard/Download/AlgorithmLocation1111.txt");
+	    	}
+	    	else {
+	    		fr = new FileReader("/mnt/sdcard/Download/GPSlocation1111.txt");
+			}
+    	}catch(FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+    	
+    	BufferedReader br = null;
+    	
+    	try{
+    		String dataString;
+    		br = new BufferedReader(fr);
+    		LatLng lattlongg = new LatLng(37.090240,-95.712891);
+    		while((dataString = br.readLine()) !=null){
+    			MarkerOptions coordinate = new MarkerOptions();
+    			lattlongg = new LatLng(Double.parseDouble(dataString),Double.parseDouble(br.readLine()));
+    	    	   
+    			coordinate = new MarkerOptions();
+    			coordinate.position(lattlongg);
+    			coordinate.title("here");
+
+    			googleMap.addMarker(coordinate);
+    		}
+    		googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattlongg,
+                    (float) 8.0));
+    	}catch(IOException e){
+			e.printStackTrace();
+		}finally{
+			try{
+				if(br != null){
+					br.close();
+				}
+			}catch(IOException ex){
+				ex.printStackTrace();
+			}
+		}
     }
     
     public Location getLocation(){
@@ -255,7 +299,6 @@ public class MapMssgActivity extends FragmentActivity  {
             }
 
             // Clears all the existing markers on the map
-            googleMap.clear();
 
             // Adding Markers on Google Map for each matching address
             for(int i=0;i<addresses.size();i++){
@@ -278,7 +321,7 @@ public class MapMssgActivity extends FragmentActivity  {
                 // Locate the first location
                 if(i==0)
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,
-                            (float) 17.0));
+                            (float) 8.0));
             }
 
         }
