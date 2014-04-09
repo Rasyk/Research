@@ -27,5 +27,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="time_on_acc">Time on Acc:</string>
     <string name="velocity">Velocity</string>
+    <!-- Mapping Features -->
+    <string name="send_location">S E N D</string>
+    <string name="str_btn_find_location">F</string>
+    <string name="hnt_et_location">Enter location</string>
+    <string name="title_activity_map_mssg">MapMssgActivity</string>
 
 </resources>

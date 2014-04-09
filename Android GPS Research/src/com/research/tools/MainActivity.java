@@ -13,6 +13,7 @@ import org.apache.wink.json4j.JSONObject;
 import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.sax.EndElementListener;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.TimingLogger;
 import android.view.View;
@@ -37,7 +39,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-public class MainActivity extends Activity implements SensorEventListener {
+public class MainActivity extends FragmentActivity implements SensorEventListener {
 	
 private static Context context;
 
@@ -134,6 +136,12 @@ private int updates;
 		        		if(deviceListener.getLocation() != null){
 		        		lat.setText(Double.toString(deviceListener.getLocation().getLatitude()));
 		        		lon.setText(Double.toString(deviceListener.getLocation().getLongitude()));
+		        		try {
+							recordData("GPSlocation",lat.getText(), lon.getText());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 		        		}
 		        		if(!deviceListener.getTimeTillFirstUpdate().equals("")) firstLock.setText(deviceListener.getTimeTillFirstUpdate());
 		        		time.setText(deviceListener.getTimeRunning());
@@ -543,6 +551,10 @@ private int updates;
 		Intent intent = new Intent(this, GraphActivity.class);
 		startActivity(intent);
 	}
+	public void mapGraph(View v){
+		Intent intent = new Intent(this, MapMssgActivity.class);
+		startActivity(intent);
+	}
 	
 	public void onSensorChanged(SensorEvent event){
 		if(event.sensor.getType()== Sensor.TYPE_ACCELEROMETER)
@@ -792,11 +804,11 @@ private int updates;
 						{
 							long now = System.currentTimeMillis();
 							Log.i("RunningTime", Long.toString(now- lastTimeMoving));
-							if(now - lastTimeMoving > 10 * 1000){
+							if(now - lastTimeMoving > 15 * 60 * 1000){
 								locationManager.removeUpdates(deviceListener);
 								Log.e("algorithmTimer", "deactivate the location manager");
 								try {
-									Thread.sleep(10000);
+									Thread.sleep(3*60*1000);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
@@ -822,6 +834,12 @@ private int updates;
 						if(deviceListener.getLocation() != null){
 						lat.setText(Double.toString(deviceListener.getLocation().getLatitude()));
 						lon.setText(Double.toString(deviceListener.getLocation().getLongitude()));
+						try {
+							recordData("AlgorithmLocation",lat.getText(), lon.getText());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						}
 						if(!deviceListener.getTimeTillFirstUpdate().equals("")) firstLock.setText(deviceListener.getTimeTillFirstUpdate());
 						time.setText(deviceListener.getTimeRunning());
@@ -849,5 +867,29 @@ private int updates;
 			Log.i("Moving","hello");
 			return true;
 		}
+	}
+	
+	public void recordData(String typeOfTechnique, CharSequence lat, CharSequence lon) throws IOException{
+		File file = null;
+		if(typeOfTechnique == "GPSlocation"){
+			file = new File("/mnt/sdcard/Download/GPSlocation1111.txt");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+		}else if(typeOfTechnique =="AlgorithmLocation"){
+			file = new File("/mnt/sdcard/Download/AlgorithmLocation1111.txt");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+		}
+		
+		FileWriter fw = new FileWriter(file.getAbsoluteFile(),true);
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(lat.toString());
+		bw.write("\n");
+		bw.write(lon.toString());
+		bw.write("\n");
+		bw.close();
 	}
 }
