@@ -70,6 +70,7 @@ private int numOfUpdate;
 private double velocity;
 private long lastTimeMoving;
 
+private long lastAccelUpdate;
 protected static int typeOfActivity;
 
 //Variables for the algorithm.
@@ -99,6 +100,7 @@ private int updates;
 		testButton.setOnClickListener(new TestButtonListener());
 		accelButton.setOnCheckedChangeListener(new AccButtonListner());
 		algroButton.setOnCheckedChangeListener(new AlgorithmButtonListener());
+		lastAccelUpdate = System.currentTimeMillis();
 	}
 	public void onGPSButtonClick(){
 		Log.i("b","gps");
@@ -557,6 +559,8 @@ private int updates;
 	}
 	
 	public void onSensorChanged(SensorEvent event){
+		if(System.currentTimeMillis() - lastAccelUpdate < 1000) return;
+		lastAccelUpdate = System.currentTimeMillis();
 		if(event.sensor.getType()== Sensor.TYPE_ACCELEROMETER)
 		{
 			double x = (double) event.values[0];
@@ -781,7 +785,7 @@ private int updates;
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		deviceListener = new DeviceListener();
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL );
+		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL * 2);
 		
 		updates = 0;
 		isWaitingForGPS = false;

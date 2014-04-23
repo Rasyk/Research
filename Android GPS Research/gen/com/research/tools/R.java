@@ -234,14 +234,14 @@ containing a value of this type.
         public static final int acc_baterry_lost=0x7f050024;
         public static final int acc_time_text=0x7f050020;
         public static final int accelerometer_button=0x7f050026;
-        public static final int action_settings=0x7f050039;
+        public static final int action_settings=0x7f05003a;
         public static final int algorithm_button=0x7f05002b;
         public static final int api_button=0x7f050032;
-        public static final int battery_consumption=0x7f050038;
+        public static final int battery_consumption=0x7f050039;
         public static final int btn_find_location=0x7f050030;
         public static final int cellFirstLockTextView=0x7f050019;
         public static final int cell_button=0x7f050011;
-        public static final int editText1=0x7f050033;
+        public static final int editText1=0x7f050034;
         public static final int et_location=0x7f05002f;
         public static final int get_current_location=0x7f050031;
         public static final int gpsBatteryLossTextView=0x7f050016;
@@ -250,16 +250,17 @@ containing a value of this type.
         public static final int gpsUpdatesTextView=0x7f050017;
         public static final int gps_button=0x7f050025;
         public static final int graph=0x7f050028;
-        public static final int graph1=0x7f050036;
+        public static final int graph1=0x7f050037;
         public static final int hybrid=0x7f050004;
         public static final int latitudeTextView=0x7f050008;
+        public static final int linearLayout1=0x7f050033;
         public static final int longitudeTextView=0x7f05000b;
         public static final int map=0x7f05002d;
         public static final int map_button=0x7f05002c;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
-        public static final int request=0x7f050034;
-        public static final int response=0x7f050035;
+        public static final int request=0x7f050035;
+        public static final int response=0x7f050036;
         public static final int satellite=0x7f050002;
         public static final int take_picture=0x7f05002e;
         public static final int terrain=0x7f050003;
@@ -281,7 +282,7 @@ containing a value of this type.
         public static final int time_on_acc=0x7f050029;
         public static final int toggleButton1=0x7f05000f;
         public static final int velocityMag=0x7f050023;
-        public static final int velocity_motion_activity=0x7f050037;
+        public static final int velocity_motion_activity=0x7f050038;
         public static final int velocity_text=0x7f050021;
         public static final int wifiBatteryLossTextView=0x7f05001f;
         public static final int wifiFirstLockTextView=0x7f05001e;
@@ -295,8 +296,9 @@ containing a value of this type.
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_map_mssg=0x7f030001;
-        public static final int cell_activity=0x7f030002;
-        public static final int graph=0x7f030003;
+        public static final int activity_new=0x7f030002;
+        public static final int cell_activity=0x7f030003;
+        public static final int graph=0x7f030004;
     }
     public static final class menu {
         public static final int graph=0x7f0a0000;
@@ -304,10 +306,10 @@ containing a value of this type.
         public static final int test=0x7f0a0002;
     }
     public static final class string {
-        public static final int API=0x7f060036;
-        public static final int action_settings=0x7f06001b;
-        public static final int algorithm=0x7f060035;
-        public static final int app_name=0x7f06001a;
+        public static final int API=0x7f060037;
+        public static final int action_settings=0x7f06001c;
+        public static final int algorithm=0x7f060036;
+        public static final int app_name=0x7f06001b;
         /**   Title for notification shown when GooglePlayServices needs to be
         enabled for a application to work. [CHAR LIMIT=70] 
          */
@@ -331,8 +333,8 @@ containing a value of this type.
         [CHAR LIMIT=70] 
          */
         public static final int auth_client_using_bad_version_title=0x7f060014;
-        public static final int battery_loss=0x7f060026;
-        public static final int cell_button_text=0x7f06001e;
+        public static final int battery_loss=0x7f060027;
+        public static final int cell_button_text=0x7f06001f;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
@@ -404,34 +406,37 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f060013;
-        public static final int defaultBatteryChange=0x7f060021;
-        public static final int defaultFirstLock=0x7f060020;
-        public static final int defaultTimeRunning=0x7f060023;
-        public static final int defaultUpdates=0x7f060022;
-        public static final int gps_button_text=0x7f06001c;
-        public static final int hello_world=0x7f060031;
-        public static final int hnt_et_location=0x7f060038;
-        public static final int latitude=0x7f06002c;
-        public static final int latitude_value=0x7f06002a;
-        public static final int longitude=0x7f06002d;
-        public static final int longitude_value=0x7f06002b;
-        public static final int minutes_till_completion=0x7f06002f;
-        public static final int run_test=0x7f06002e;
+        public static final int defaultBatteryChange=0x7f060022;
+        public static final int defaultFirstLock=0x7f060021;
+        public static final int defaultTimeRunning=0x7f060024;
+        public static final int defaultUpdates=0x7f060023;
+        public static final int gps_button_text=0x7f06001d;
+        public static final int hello_world=0x7f060032;
+        public static final int hnt_et_location=0x7f060039;
+        public static final int latitude=0x7f06002d;
+        public static final int latitude_value=0x7f06002b;
+        /**  Location client code resources (prefix with location_client) 
+         */
+        public static final int location_client_powered_by_google=0x7f06001a;
+        public static final int longitude=0x7f06002e;
+        public static final int longitude_value=0x7f06002c;
+        public static final int minutes_till_completion=0x7f060030;
+        public static final int run_test=0x7f06002f;
         /**  Mapping Features 
          */
-        public static final int send_location=0x7f060034;
-        public static final int str_btn_find_location=0x7f060037;
-        public static final int time_on_acc=0x7f060032;
-        public static final int time_on_cell=0x7f060028;
-        public static final int time_on_gps=0x7f060024;
-        public static final int time_on_wifi=0x7f060029;
-        public static final int time_till_first_lock=0x7f060025;
-        public static final int title_activity_graph=0x7f060030;
-        public static final int title_activity_map_mssg=0x7f060039;
-        public static final int title_activity_test=0x7f06001f;
-        public static final int updates=0x7f060027;
-        public static final int velocity=0x7f060033;
-        public static final int wifi_button_text=0x7f06001d;
+        public static final int send_location=0x7f060035;
+        public static final int str_btn_find_location=0x7f060038;
+        public static final int time_on_acc=0x7f060033;
+        public static final int time_on_cell=0x7f060029;
+        public static final int time_on_gps=0x7f060025;
+        public static final int time_on_wifi=0x7f06002a;
+        public static final int time_till_first_lock=0x7f060026;
+        public static final int title_activity_graph=0x7f060031;
+        public static final int title_activity_map_mssg=0x7f06003a;
+        public static final int title_activity_test=0x7f060020;
+        public static final int updates=0x7f060028;
+        public static final int velocity=0x7f060034;
+        public static final int wifi_button_text=0x7f06001e;
     }
     public static final class style {
         /** 
