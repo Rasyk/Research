@@ -15,18 +15,26 @@ import android.location.LocationManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Document;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -36,6 +44,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.app.Activity;
 import android.view.View.OnClickListener;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.view.Menu;
@@ -108,15 +117,25 @@ public class MapMssgActivity extends FragmentActivity  {
                    (float) 17.0));
     	   
        }
-
-
+  
+       //new PlotDirectionTask().execute("huy");
+       Thread plotUserMovement = new DynamicLocation();
+       plotUserMovement.run();
     }
 
     /**
      * function to load map. If map is not created it will create it for you
      * */
-    private void initilizeMap() {
-        if (googleMap == null) {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	@SuppressLint("NewApi")
+	private void initilizeMap() {
+//    	GMapV2Direction md = new GMapV2Direction();
+//    	LatLng start;
+//    	LatLng end;
+//    	start = new LatLng(34.05755723, -117.82353688);
+//    	end  = new LatLng(34.06205066,-117.82055747);
+//    	Document doc = md.getDocument(start, end, GMapV2Direction.MODE_WALKING);
+    	if (googleMap == null) {
             googleMap = ((MapFragment) getFragmentManager().findFragmentById(
                     R.id.map)).getMap();
 
@@ -129,7 +148,13 @@ public class MapMssgActivity extends FragmentActivity  {
         }
         //centerMapOnMyLocation();
         googleMap.setMyLocationEnabled(false);
-        
+//        ArrayList<LatLng> directionPoint = md.getDirection(doc);
+//        PolylineOptions rectLine = new PolylineOptions().width(3).color(
+//                Color.RED);
+//        for (int i = 0; i < directionPoint.size(); i++) {
+//            rectLine.add(directionPoint.get(i));
+//        }
+//        Polyline polylin = googleMap.addPolyline(rectLine);
     }
 
     @Override
@@ -327,6 +352,81 @@ public class MapMssgActivity extends FragmentActivity  {
         }
 
     }
+    
+    class PlotDirectionTask extends AsyncTask<String, Void, ArrayList<LatLng>>{
 
+    	
+		@Override
+		protected ArrayList<LatLng> doInBackground(String... params) {
+		  	GMapV2Direction md = new GMapV2Direction();
+	    	LatLng start;
+	    	LatLng end;
+	    	start = new LatLng(34.0587525,-117.82435413);
+	    	end  = new LatLng(34.055295, -117.821037);
+	    	Document doc = md.getDocument(start, end, GMapV2Direction.MODE_WALKING);
+	    	Log.e("Direction", doc.toString());
+	    	ArrayList<LatLng> directionPoint = md.getDirection(doc);
+	        
+	       return directionPoint;
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<LatLng> directionPoint) {
+			PolylineOptions rectLine = new PolylineOptions().width(3).color(
+	                Color.RED);
+	        for (int i = 0; i < directionPoint.size(); i++) {
+	            rectLine.add(directionPoint.get(i));
+	        }
+	        Polyline polylin = googleMap.addPolyline(rectLine);
+	        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(directionPoint.get(0),
+                    (float) 15.0));
+		}
+    	
+    }
+    
+    class DynamicLocation extends Thread{
+    	public void run(){
+    		
+    			
+    			LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+    			LocationListener locationListener = new LocationListener() {
+    				public void onLocationChanged(Location location){
+    					updateMapUI(location);
+    				}
 
-}
+					private void updateMapUI(Location location) {
+						MarkerOptions marker = new MarkerOptions();
+						marker.position(new LatLng(location.getLatitude(), location.getLongitude()));
+						MapMssgActivity.this.googleMap.addMarker(marker);
+						
+					}
+
+					@Override
+					public void onProviderDisabled(String paramString) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void onProviderEnabled(String paramString) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void onStatusChanged(String paramString,
+							int paramInt, Bundle paramBundle) {
+						// TODO Auto-generated method stub
+						
+					}
+    				
+    			};
+    			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+    			
+    		
+    	}
+    }
+}   
+  
+
+  
