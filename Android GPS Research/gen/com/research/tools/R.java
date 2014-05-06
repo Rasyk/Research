@@ -232,6 +232,7 @@ containing a value of this type.
         public static final int ic_plusone_small_off_client=0x7f020023;
         public static final int ic_plusone_standard_off_client=0x7f020024;
         public static final int ic_plusone_tall_off_client=0x7f020025;
+        public static final int user_marker=0x7f020026;
     }
     public static final class id {
         public static final int TextView01=0x7f050022;
@@ -313,10 +314,10 @@ containing a value of this type.
         public static final int test=0x7f0b0002;
     }
     public static final class string {
-        public static final int API=0x7f060037;
-        public static final int action_settings=0x7f06001c;
-        public static final int algorithm=0x7f060036;
-        public static final int app_name=0x7f06001b;
+        public static final int API=0x7f060036;
+        public static final int action_settings=0x7f06001b;
+        public static final int algorithm=0x7f060035;
+        public static final int app_name=0x7f06001a;
         /**   Title for notification shown when GooglePlayServices needs to be
         enabled for a application to work. [CHAR LIMIT=70] 
          */
@@ -340,9 +341,9 @@ containing a value of this type.
         [CHAR LIMIT=70] 
          */
         public static final int auth_client_using_bad_version_title=0x7f060014;
-        public static final int battery_loss=0x7f060027;
-        public static final int building_prompt=0x7f06003b;
-        public static final int cell_button_text=0x7f06001f;
+        public static final int battery_loss=0x7f060026;
+        public static final int building_prompt=0x7f06003a;
+        public static final int cell_button_text=0x7f06001e;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
@@ -414,38 +415,35 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f060013;
-        public static final int defaultBatteryChange=0x7f060022;
-        public static final int defaultFirstLock=0x7f060021;
-        public static final int defaultTimeRunning=0x7f060024;
-        public static final int defaultUpdates=0x7f060023;
-        public static final int gps_button_text=0x7f06001d;
-        public static final int hello_world=0x7f060032;
-        public static final int hnt_et_location=0x7f060039;
-        public static final int latitude=0x7f06002d;
-        public static final int latitude_value=0x7f06002b;
-        /**  Location client code resources (prefix with location_client) 
-         */
-        public static final int location_client_powered_by_google=0x7f06001a;
-        public static final int longitude=0x7f06002e;
-        public static final int longitude_value=0x7f06002c;
-        public static final int minutes_till_completion=0x7f060030;
-        public static final int mode_prompt=0x7f06003c;
-        public static final int run_test=0x7f06002f;
+        public static final int defaultBatteryChange=0x7f060021;
+        public static final int defaultFirstLock=0x7f060020;
+        public static final int defaultTimeRunning=0x7f060023;
+        public static final int defaultUpdates=0x7f060022;
+        public static final int gps_button_text=0x7f06001c;
+        public static final int hello_world=0x7f060031;
+        public static final int hnt_et_location=0x7f060038;
+        public static final int latitude=0x7f06002c;
+        public static final int latitude_value=0x7f06002a;
+        public static final int longitude=0x7f06002d;
+        public static final int longitude_value=0x7f06002b;
+        public static final int minutes_till_completion=0x7f06002f;
+        public static final int mode_prompt=0x7f06003b;
+        public static final int run_test=0x7f06002e;
         /**  Mapping Features 
          */
-        public static final int send_location=0x7f060035;
-        public static final int str_btn_find_location=0x7f060038;
-        public static final int time_on_acc=0x7f060033;
-        public static final int time_on_cell=0x7f060029;
-        public static final int time_on_gps=0x7f060025;
-        public static final int time_on_wifi=0x7f06002a;
-        public static final int time_till_first_lock=0x7f060026;
-        public static final int title_activity_graph=0x7f060031;
-        public static final int title_activity_map_mssg=0x7f06003a;
-        public static final int title_activity_test=0x7f060020;
-        public static final int updates=0x7f060028;
-        public static final int velocity=0x7f060034;
-        public static final int wifi_button_text=0x7f06001e;
+        public static final int send_location=0x7f060034;
+        public static final int str_btn_find_location=0x7f060037;
+        public static final int time_on_acc=0x7f060032;
+        public static final int time_on_cell=0x7f060028;
+        public static final int time_on_gps=0x7f060024;
+        public static final int time_on_wifi=0x7f060029;
+        public static final int time_till_first_lock=0x7f060025;
+        public static final int title_activity_graph=0x7f060030;
+        public static final int title_activity_map_mssg=0x7f060039;
+        public static final int title_activity_test=0x7f06001f;
+        public static final int updates=0x7f060027;
+        public static final int velocity=0x7f060033;
+        public static final int wifi_button_text=0x7f06001d;
     }
     public static final class style {
         /** 

@@ -22,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -446,6 +447,7 @@ public class MapMssgActivity extends FragmentActivity  {
 					private void updateMapUI(Location location) {
 						MarkerOptions marker = new MarkerOptions();
 						marker.position(new LatLng(location.getLatitude(), location.getLongitude()));
+						marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.user_marker));
 						MapMssgActivity.this.googleMap.addMarker(marker);
 						googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),
 				                   (float) 17.0));
