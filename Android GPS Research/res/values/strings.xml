@@ -34,5 +34,20 @@
     <string name="str_btn_find_location">F</string>
     <string name="hnt_et_location">Enter location</string>
     <string name="title_activity_map_mssg">MapMssgActivity</string>
-
+    <string-array name="building_arrays">
+        <item>1：</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string name="building_prompt">Choose a Building</string>
+    <string-array name="mode_arrays">
+        <item>Driving</item>
+        <item>Walking</item>
+    </string-array>
+    <string name="mode_prompt">Choose a Building</string>
 </resources>

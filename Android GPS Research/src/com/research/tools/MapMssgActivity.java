@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 
+import com.google.android.gms.drive.internal.e;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
@@ -25,10 +26,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.research.tools.MyLocation.LocationResult;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
@@ -39,8 +42,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.app.Activity;
 import android.view.View.OnClickListener;
@@ -60,6 +65,10 @@ public class MapMssgActivity extends FragmentActivity  {
     private ArrayList<MarkerOptions> apiCoordinatesArrayList;
     private LatLng latLng;
     Location location;
+    ArrayList<Building> buildings;
+    Thread plotUserMovement;
+    LatLng startingLocation;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +88,8 @@ public class MapMssgActivity extends FragmentActivity  {
         //getting btn_find_location
         Button btn_find = (Button) findViewById(R.id.btn_find_location);
         Button get_current_location = (Button) findViewById(R.id.get_current_location);
-
+        Button go_btn = (Button) findViewById(R.id.go_button);
+        
         //Define the listener to btn_find_location
         OnClickListener findClickListener = new OnClickListener() {
             @Override
@@ -101,9 +111,17 @@ public class MapMssgActivity extends FragmentActivity  {
             	centerMapOnMyLocation();
             }
         };
+        OnClickListener goClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	mapDirections();
+            }
+        };
+        
         btn_find.setOnClickListener(findClickListener);
         get_current_location.setOnClickListener(getCurrentListener);
-        
+        go_btn.setOnClickListener(goClickListener);
+        progress = new ProgressDialog(this);
        if(getIntent().getStringExtra("location") != null){
     	   String[] locationStrings = getIntent().getStringExtra("location").split("M");
     	   LatLng lattlongg = new LatLng(Double.parseDouble(locationStrings[0]),Double.parseDouble(locationStrings[1]));
@@ -119,11 +137,39 @@ public class MapMssgActivity extends FragmentActivity  {
        }
   
        //new PlotDirectionTask().execute("huy");
-       Thread plotUserMovement = new DynamicLocation();
-       plotUserMovement.run();
+       plotUserMovement = new DynamicLocation();
+       
+       
+       initializeBuilding();
+       
+       
     }
 
-    /**
+    private void initializeBuilding() {
+		buildings = new ArrayList<Building>();
+		
+		buildings.add(new Building(new LatLng(34.129167, -117.441866), "Neighborhood"));
+		buildings.add(new Building(new LatLng(34.059366, -117.823947), "One"));
+		buildings.add(new Building(new LatLng(34.058784,-117.824454), "Building 8: College of Science"));
+		buildings.add(new Building(new LatLng(34.058886, -117.823274), "Building 94: University office building"));
+		
+		
+		// adapt the arraylist to spinner
+		ArrayList<String> buildingName = new ArrayList<String>();
+		for(int i = 0; i < buildings.size(); i++){
+			buildingName.add(buildings.get(i).getName());
+		}
+		
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+        (this, android.R.layout.simple_spinner_item,buildingName);
+         
+		dataAdapter.setDropDownViewResource
+        (android.R.layout.simple_spinner_dropdown_item);
+		Spinner building = (Spinner) findViewById(R.id.building);
+		building.setAdapter(dataAdapter);
+	}
+
+	/**
      * function to load map. If map is not created it will create it for you
      * */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -353,27 +399,29 @@ public class MapMssgActivity extends FragmentActivity  {
 
     }
     
-    class PlotDirectionTask extends AsyncTask<String, Void, ArrayList<LatLng>>{
+    class PlotDirectionTask extends AsyncTask<LatLng, Void, ArrayList<LatLng>>{
 
     	
 		@Override
-		protected ArrayList<LatLng> doInBackground(String... params) {
+		protected ArrayList<LatLng> doInBackground(LatLng... latlong) {
 		  	GMapV2Direction md = new GMapV2Direction();
 	    	LatLng start;
 	    	LatLng end;
-	    	start = new LatLng(34.0587525,-117.82435413);
-	    	end  = new LatLng(34.055295, -117.821037);
+	    	
+	    	start = latlong[0];
+	    	
+	    	end  =latlong[1];
 	    	Document doc = md.getDocument(start, end, GMapV2Direction.MODE_WALKING);
 	    	Log.e("Direction", doc.toString());
 	    	ArrayList<LatLng> directionPoint = md.getDirection(doc);
 	        
-	       return directionPoint;
+	        return directionPoint;
 		}
 		
 		@Override
 		protected void onPostExecute(ArrayList<LatLng> directionPoint) {
 			PolylineOptions rectLine = new PolylineOptions().width(3).color(
-	                Color.RED);
+	                Color.BLUE);
 	        for (int i = 0; i < directionPoint.size(); i++) {
 	            rectLine.add(directionPoint.get(i));
 	        }
@@ -385,6 +433,7 @@ public class MapMssgActivity extends FragmentActivity  {
     }
     
     class DynamicLocation extends Thread{
+    	
     	public void run(){
     		
     			
@@ -398,6 +447,10 @@ public class MapMssgActivity extends FragmentActivity  {
 						MarkerOptions marker = new MarkerOptions();
 						marker.position(new LatLng(location.getLatitude(), location.getLongitude()));
 						MapMssgActivity.this.googleMap.addMarker(marker);
+						googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),
+				                   (float) 17.0));
+						MapMssgActivity.this.location = location; 
+						startingLocation = new LatLng(location.getLatitude(), location.getLongitude());
 						
 					}
 
@@ -422,10 +475,60 @@ public class MapMssgActivity extends FragmentActivity  {
     				
     			};
     			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-    			
-    		
     	}
     }
+    
+    public void mapDirections(){
+    	plotUserMovement.run();
+        
+        final Thread t = new Thread(){
+        	@Override
+        	public void run(){
+        		try{
+        			sleep(25000);
+        			
+        			
+        		}catch(InterruptedException exception){
+        			exception.printStackTrace();
+        		}
+        		if(startingLocation == null){
+        			Log.e("mapdirection", "no starting location");
+        			run();
+    			}
+    			else{
+    				//progress.dismiss();
+    				PlotDirectionTask task = new PlotDirectionTask();
+    		    	
+    		    	LatLng[] arrayLatLngs = new LatLng[2];
+    		    	
+    			    
+    		    	
+    			    arrayLatLngs[0] = startingLocation;
+    				arrayLatLngs[1] = getEndingLocation();
+    				if(arrayLatLngs[1] == null)
+    				{
+    					Log.e("mapdirection", "no ending location");
+    				}
+    				task.execute(arrayLatLngs);
+    			}
+        	}
+        };
+        
+        t.start();
+    	
+		
+		    
+		    
+    }
+    
+    public LatLng getEndingLocation(){
+    	Spinner building = (Spinner) findViewById(R.id.building);
+    	int position = building.getSelectedItemPosition();
+//    	Log.e("Ending location", )
+    	return buildings.get(position).getLocation();
+    }
+    
+   
 }   
   
 
