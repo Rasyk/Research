@@ -1,0 +1,20 @@
+Cal Poly Pomona building list
+1 (34.059378,-117.824055) Building 1
+2 (34.057896,-117.826413) College of Agriculture
+3 (34.058129,-117.825066) Science Laboratory
+4 (34.057249,-117.825225) BioTechnology Building
+5 (34.057853,-117.824163) College Of Letter, Art, And Social Science
+6 (34.058471,-117.823009) College of Education and Integrative Studies
+7 (34.057171,-117.827110) College of Environmental Design
+8 (34.058717,-117.824648) College of Science
+9 (34.059077,-117.822481) College of Engineering
+97 (34.057606,-117.823725) Campus Center
+92 (34.057575,-117.826032) Laboratory Facility
+95 (34.057904,-117.822797) Cultural Center
+15 (34.057322,-117.821285) Library
+98 (34.059157,-117.819933) CLA building
+94 (34.058962, -117.823312) University Office Building
+95 (34.056633, -117.821290) Bronco Student Center
+162 (34.061197, -117.819820) College of Business of Administration
+163 (34.061197, -117.819820) College of Business of Administration
+164 (34.061197, -117.819820) College of Business of Administration
