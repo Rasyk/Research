@@ -808,7 +808,7 @@ private int updates;
 						{
 							long now = System.currentTimeMillis();
 							Log.i("RunningTime", Long.toString(now- lastTimeMoving));
-							if(now - lastTimeMoving > 15 * 60 * 1000){
+							if(now - lastTimeMoving > 1 * 60 * 1000){
 								locationManager.removeUpdates(deviceListener);
 								Log.e("algorithmTimer", "deactivate the location manager");
 								try {

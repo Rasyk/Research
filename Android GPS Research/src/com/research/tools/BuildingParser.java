@@ -15,6 +15,7 @@ public class BuildingParser {
 	ArrayList<Building> building;
 	
 	public BuildingParser(String fileName) throws IOException{
+		building = new ArrayList<Building>();
 		br = new BufferedReader (new FileReader(fileName));
 		String currentLine = null;
 		
@@ -30,6 +31,13 @@ public class BuildingParser {
 
 	private void addRecordToBuildingArray(String currentLine) {
 		String[] parts = currentLine.split("\t");
+		if(parts.length ==4){
+			Log.i("parserAddingRecord",parts[0] + ","+parts[1] + ","+parts[2] + ","+parts[3]);
+		}
+		else
+		{
+			Log.i("parserAddingRecord",parts[0] + ","+parts[1] + ","+parts[2] );
+		}
 		Building temp;
 		//parse Id
 		int id = Integer.parseInt(parts[0]);

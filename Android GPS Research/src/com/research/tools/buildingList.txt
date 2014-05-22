@@ -10,16 +10,12 @@ Id	LatLong	 Events
 8	34.058717,-117.824648	College of Science Event: This is building 8
 9	34.059077,-117.822481	College of Engineering Event: This is building 9
 15	34.057322,-117.821285	Library Event: This is the Library
-35	34.056633,-117.821290	Bronco Student Center
+35	34.056633, -117.821290	Bronco Student Center
 92	34.057575,-117.826032	Laboratory Facility
-94	34.058962,-117.823312	University Office Building 
+94	34.058962, -117.823312	University Office Building 
 95	34.057904,-117.822797	Cultural Center
 97	34.057606,-117.823725	Campus Center
 98	34.059157,-117.819933	CLA Building 	Event:This is the CLA
-162	34.061197,-117.819820	College of Business of Administration
-163	34.061197,-117.819820	College of Business of Administration
-164	34.061197,-117.819820	College of Business of Administration
-1000	34.117365,-117.460245	Testing point 1 	1
-1001	34.118821,-117.460299	Testing point 2 	2
-1002	34.119985,-117.460245	Testing point 3 	3
-1003	34.121282,-117.460234	Testing point 4 	4
+162	34.061197, -117.819820	College of Business of Administration
+163	34.061197, -117.819820	College of Business of Administration
+164	34.061197, -117.819820	College of Business of Administration

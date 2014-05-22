@@ -14,6 +14,8 @@ import android.location.LocationManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.w3c.dom.Document;
 
@@ -23,7 +25,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -40,6 +44,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -60,6 +66,7 @@ import android.support.v4.app.Fragment;
 public class MapMssgActivity extends FragmentActivity  {
 
     // Google Map
+	private Handler uiCallback;
     private GoogleMap googleMap;
     private MarkerOptions markerOptions;
     private ArrayList<MarkerOptions> algorithmCoordinatesArrayList;
@@ -141,24 +148,45 @@ public class MapMssgActivity extends FragmentActivity  {
        plotUserMovement = new DynamicLocation();
        
        
-       initializeBuilding();
-       
+       try {
+		initializeBuilding();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+       uiCallback = new Handler () {
+    	    public void handleMessage (Message msg) {
+    	    	Marker marker = googleMap.addMarker(buildings.get(msg.arg1).getMarker());
+				marker.showInfoWindow();
+    	    }
+    	};
        
     }
 
-    private void initializeBuilding() {
+    private void initializeBuilding() throws IOException {
 		buildings = new ArrayList<Building>();
 		
-		buildings.add(new Building(new LatLng(34.129167, -117.441866), "Neighborhood"));
-		buildings.add(new Building(new LatLng(34.059366, -117.823947), "One"));
-		buildings.add(new Building(new LatLng(34.058784,-117.824454), "Building 8: College of Science"));
-		buildings.add(new Building(new LatLng(34.058886, -117.823274), "Building 94: University office building"));
+//		buildings.add(new Building(new LatLng(34.129167, -117.441866), "Neighborhood"));
+//		buildings.add(new Building(new LatLng(34.059366, -117.823947), "One"));
+//		buildings.add(new Building(new LatLng(34.058784,-117.824454), "Building 8: College of Science"));
+//		buildings.add(new Building(new LatLng(34.058886, -117.823274), "Building 94: University office building"));
+		
+		BuildingParser parser = new BuildingParser("/mnt/sdcard/Download/buildingList.txt");
+		
+		//create buildings ArraysList
+		buildings = parser.getBuildingArray();
+		
+		//This is for testing
+		
+		for( int i  =0 ; i < buildings.size(); i++){
+			Log.i("Building", buildings.get(i).getString());
+		}
 		
 		
 		// adapt the arraylist to spinner
 		ArrayList<String> buildingName = new ArrayList<String>();
 		for(int i = 0; i < buildings.size(); i++){
-			buildingName.add(buildings.get(i).getName());
+			buildingName.add(Integer.toString(buildings.get(i).getID()) + ":"+buildings.get(i).getName());
 		}
 		
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
@@ -168,6 +196,11 @@ public class MapMssgActivity extends FragmentActivity  {
         (android.R.layout.simple_spinner_dropdown_item);
 		Spinner building = (Spinner) findViewById(R.id.building);
 		building.setAdapter(dataAdapter);
+		
+		//Add each Building marker on the map
+		for (int i = 0; i < buildings.size(); i++){
+			googleMap.addMarker(buildings.get(i).getMarker());
+		}
 	}
 
 	/**
@@ -449,8 +482,16 @@ public class MapMssgActivity extends FragmentActivity  {
 						marker.position(new LatLng(location.getLatitude(), location.getLongitude()));
 						marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.user_marker));
 						MapMssgActivity.this.googleMap.addMarker(marker);
-						googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),
-				                   (float) 17.0));
+						
+						
+						LatLng loc =new LatLng(location.getLatitude(), location.getLongitude());
+						float zoom= (float) 20.00;
+						float bearing= (float) 0.00;
+						float tilt= (float) 90.00;
+						CameraPosition cameraPosition = new CameraPosition(loc, zoom, tilt,bearing);
+						
+						googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+					             cameraPosition));
 						MapMssgActivity.this.location = location; 
 						startingLocation = new LatLng(location.getLatitude(), location.getLongitude());
 						
@@ -503,8 +544,6 @@ public class MapMssgActivity extends FragmentActivity  {
     		    	
     		    	LatLng[] arrayLatLngs = new LatLng[2];
     		    	
-    			    
-    		    	
     			    arrayLatLngs[0] = startingLocation;
     				arrayLatLngs[1] = getEndingLocation();
     				if(arrayLatLngs[1] == null)
@@ -512,12 +551,75 @@ public class MapMssgActivity extends FragmentActivity  {
     					Log.e("mapdirection", "no ending location");
     				}
     				task.execute(arrayLatLngs);
+    				int period = 1*1000;
+    		        
+    		        Timer timer = new Timer();
+    		        
+    		        timer.scheduleAtFixedRate(new TimerTask(){
+    		        	public void run(){
+    		        		updateDistanceToUser();
+    		        		updateMap();
+    		        	}
+
+    					
+
+    					private void updateDistanceToUser() {
+    						for(int i =0; i<buildings.size(); i++){
+    							buildings.get(i).setDistance(calCulateDistance(startingLocation, buildings.get(i).getLocation(),'K'));
+    						}
+    						
+    					}
+    					
+    					private double calCulateDistance(LatLng start, LatLng end, char unit){
+    						double lat1 = start.latitude;
+    						double lat2 = end.latitude;
+    						double lon1 = start.longitude;
+    						double lon2 = end.longitude;
+    						double theta = lon1 - lon2;
+    					      double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+    					      dist = Math.acos(dist);
+    					      dist = rad2deg(dist);
+    					      dist = dist * 60 * 1.1515;
+    					      if (unit == 'K') {
+    					        dist = dist * 1.609344;
+    					      } else if (unit == 'N') {
+    					        dist = dist * 0.8684;
+    					        }
+    					      return (dist);
+    					    }
+
+    					    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    					    /*::  This function converts decimal degrees to radians             :*/
+    					    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    					    private double deg2rad(double deg) {
+    					      return (deg * Math.PI / 180.0);
+    					    }
+
+    					    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    					    /*::  This function converts radians to decimal degrees             :*/
+    					    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    					    private double rad2deg(double rad) {
+    					      return (rad * 180.0 / Math.PI);
+    					    }
+    					
+    					private void updateMap() {
+    						for(int i = 0; i< buildings.size(); i++){
+    							if(buildings.get(i).getDistance()<0.094697 && buildings.get(i).getMarker().getSnippet()!=null){
+    								Message message = new Message();
+    								message.arg1 = i;
+    								uiCallback.sendMessage(message);
+    							}
+    						}
+    						
+    					}
+    		        }, 0, period);
     			}
         	}
         };
         
         t.start();
     	
+        
 		
 		    
 		    

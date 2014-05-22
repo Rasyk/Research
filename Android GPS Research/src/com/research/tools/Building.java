@@ -1,5 +1,6 @@
 package com.research.tools;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -10,6 +11,7 @@ public class Building {
 	private String name;
 	private String events;
 	private MarkerOptions marker;
+	private double distance;
 	
 	public Building(int id,LatLng location , String name, String events){
 		this.location = location;
@@ -20,6 +22,7 @@ public class Building {
 		marker.position(location);
 		marker.title(name);
 		marker.snippet(events);
+		marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 	}
 	
 	public Building (int id, LatLng location, String name){
@@ -29,6 +32,7 @@ public class Building {
 		marker = new MarkerOptions();
 		marker.position(location);
 		marker.title(name);
+		marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 	}
 	
 	public LatLng getLocation(){
@@ -53,5 +57,17 @@ public class Building {
 	
 	public String getString(){
 		return Integer.toString(id) + "\t" + Double.toString(location.latitude)+ "," +Double.toString(location.longitude) +"\t" +name+ "\t"+ events;
+	}
+	
+	public MarkerOptions getMarker(){
+		return marker;
+	}
+	
+	public void setDistance(double distance){
+		this.distance = distance;
+	}
+	
+	public double getDistance(){
+		return distance;
 	}
 }
