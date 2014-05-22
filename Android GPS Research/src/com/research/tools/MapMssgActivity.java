@@ -39,6 +39,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -77,6 +81,11 @@ public class MapMssgActivity extends FragmentActivity  {
     Thread plotUserMovement;
     LatLng startingLocation;
     private ProgressDialog progress;
+    private float currentDegree = 0f;
+    private SensorManager mSensorManager;
+    private boolean zoomCamera= true;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +169,8 @@ public class MapMssgActivity extends FragmentActivity  {
 				marker.showInfoWindow();
     	    }
     	};
+    	mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+ 
        
     }
 
@@ -241,6 +252,8 @@ public class MapMssgActivity extends FragmentActivity  {
     protected void onResume() {
         super.onResume();
         initilizeMap();
+        
+
     }
 
     private void centerMapOnMyLocation() {
@@ -485,13 +498,15 @@ public class MapMssgActivity extends FragmentActivity  {
 						
 						
 						LatLng loc =new LatLng(location.getLatitude(), location.getLongitude());
-						float zoom= (float) 20.00;
+						float zoom= (float) 18.00;
 						float bearing= (float) 0.00;
 						float tilt= (float) 90.00;
 						CameraPosition cameraPosition = new CameraPosition(loc, zoom, tilt,bearing);
-						
-						googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+						if(zoomCamera == true){
+							googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(
 					             cameraPosition));
+							zoomCamera = false;
+						}
 						MapMssgActivity.this.location = location; 
 						startingLocation = new LatLng(location.getLatitude(), location.getLongitude());
 						
@@ -631,6 +646,26 @@ public class MapMssgActivity extends FragmentActivity  {
 //    	Log.e("Ending location", )
     	return buildings.get(position).getLocation();
     }
+
+//	@Override
+//	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void onSensorChanged(SensorEvent event) {
+//		if(location!= null){
+//			float degree = Math.round(event.values[0]);
+//			LatLng loc =new LatLng(location.getLatitude(), location.getLongitude());
+//			float zoom= (float) 20.00;
+//			float bearing= degree;
+//			float tilt= (float) 90.00;
+//			CameraPosition cameraPosition = new CameraPosition(loc, zoom, tilt,bearing);
+//			googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+//		             cameraPosition));
+//		}
+//	}
     
    
 }   
